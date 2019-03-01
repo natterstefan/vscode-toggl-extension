@@ -1,7 +1,18 @@
+# vscode files
 .vscode/**
 .vscode-test/**
+
+# documentation
+docs/**
+
+# testing
+dist-test/**
 test/**
+
+# tools
+.eslintrc.js
 .gitignore
-jsconfig.json
-vsc-extension-quickstart.md
-.eslintrc.json
+.npmrc
+.nvmrc
+.prettierrc
+babel.config.js
