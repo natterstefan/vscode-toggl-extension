@@ -1,4 +1,4 @@
-# vs-code-toggl-extension
+# Toggl Extension for VSCode
 
 Track your working hours in Toggl directly in your VS Code.
 
@@ -34,9 +34,21 @@ the code, you have to execute `Reload Window` to see the changes.
 
 A guide about "Creating a VS Code Extension" can be found [here](https://code.visualstudio.com/api).
 
+## How to test
+
+Either open the debug tab in your VS Code and start the `Extension Test` task,
+or run `npm t` in the terminal. When you run it in the terminal, make sure no
+other VS Code instance is running.
+
+[Jest](https://jestjs.io/) is used for testing, and the implementation is
+[inspired by the Unibeautify/vscode package](https://github.com/Unibeautify/vscode/tree/82e360ff73516c213fea0fa6c2740f0cd53d581b/test).
+
 ## Licence
 
 [MIT](./LICENCE)
+
+This extension is not affiliated, associated, authorized, endorsed by or in any
+way officially connected to Toggl ([toggl.com](https://toggl.com)).
 
 ## Maintainers
 
