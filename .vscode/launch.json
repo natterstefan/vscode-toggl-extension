@@ -2,6 +2,9 @@
 // Use IntelliSense to learn about possible attributes.
 // Hover to view descriptions of existing attributes.
 // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+//
+// inspired by
+// - https://github.com/Unibeautify/vscode/blob/82e360ff73516c213fea0fa6c2740f0cd53d581b/.vscode/launch.json
 {
 	"version": "0.2.0",
   "configurations": [
@@ -25,7 +28,7 @@
       "args": [
         "--disable-extensions",
         "--extensionDevelopmentPath=${workspaceRoot}",
-        "--extensionTestsPath=${workspaceRoot}/dist/test"
+        "--extensionTestsPath=${workspaceRoot}/dist-test"
       ],
       "preLaunchTask": "build"
     }

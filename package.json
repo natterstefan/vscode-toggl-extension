@@ -7,14 +7,17 @@
   "license": "MIT",
   "version": "0.0.1",
   "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "rimraf dist && babel ./src --ignore **/*.test.js --out-dir dist && babel test --out-dir dist/test",
+    "clean": "rimraf dist && rimraf dist-test",
+    "build": "npm run clean && babel ./src --ignore **/*.test.js --out-dir dist && babel test --out-dir dist-test",
     "lint-fix": "eslint --fix ./src",
     "lint": "eslint ./src",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "precommit": "lint-staged",
     "pretest": "npm run build",
-    "test": "cross-env CODE_TESTS_WORKSPACE=test-project CODE_TESTS_PATH=${INIT_CWD}/dist/test node ./node_modules/vscode/bin/test"
+    "test": "cross-env CODE_TESTS_WORKSPACE=test-project CODE_TESTS_PATH=${INIT_CWD}/dist-test node ./node_modules/vscode/bin/test"
   },
   "engines": {
     "vscode": "^1.27.1"
@@ -42,6 +45,11 @@
           "description": "Text"
         }
       }
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {

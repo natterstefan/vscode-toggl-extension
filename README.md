@@ -70,4 +70,3 @@ way officially connected to Toggl ([toggl.com](https://toggl.com)).
     </tr>
   <tbody>
 </table>
-)

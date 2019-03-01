@@ -8,7 +8,7 @@ import path from 'path'
 import { runCLI } from 'jest' // eslint-disable-line
 import sourceMapSupport from 'source-map-support'
 
-const rootDir = path.resolve(__dirname, '../../')
+const rootDir = path.resolve(__dirname, '../') // assumes compiled test-files are in ./dist-test
 const fromRoot = (...subPaths) => path.resolve(rootDir, ...subPaths)
 
 const jestConfig = {
@@ -18,9 +18,9 @@ const jestConfig = {
   roots: ['<rootDir>/src'],
   runInBand: true, // Required due to the way the "vscode" module is injected.
   setupTestFrameworkScriptFile: fromRoot(
-    'dist/test/jest-vscode-framework-setup.js',
+    'dist-test/jest-vscode-framework-setup.js',
   ),
-  testEnvironment: fromRoot('dist/test/jest-vscode-environment.js'),
+  testEnvironment: fromRoot('dist-test/jest-vscode-environment.js'),
   testRegex: '\\.(test|spec)\\.js$',
   verbose: true,
 }

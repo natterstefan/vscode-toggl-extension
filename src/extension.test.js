@@ -7,7 +7,7 @@ import { activate } from './extension'
 // Defines a Jest test suite to group tests of similar kind together
 describe('Extension', () => {
   // Defines a Jest unit test
-  test('Activate', () => {
+  it('Activate', () => {
     const context = {
       subscriptions: [],
     }
