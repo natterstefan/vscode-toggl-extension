@@ -1,0 +1,54 @@
+{
+  "name": "vs-code-toggl-extension",
+  "displayName": "Toggl for VS Code",
+  "description": "Track your working hours in Toggl directly in your VS Code.",
+  "version": "0.0.1",
+  "publisher": "natterstefan",
+  "engines": {
+    "vscode": "^1.27.1"
+  },
+  "categories": ["Other"],
+  "activationEvents": ["onCommand:extension.sayHello"],
+  "main": "./src/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.sayHello",
+        "title": "Hello World"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "vs-code-toggl-extension configuration",
+      "properties": {
+        "vscodens.text": {
+          "type": "string",
+          "default": "Hello World :)",
+          "description": "Text"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "lint-fix": "eslint --fix ./src",
+    "lint": "eslint ./src",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "precommit": "lint-staged",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "lint-staged": {
+    "*.js": ["prettier --write", "npm run lint-fix", "git update-index --again"]
+  },
+  "devDependencies": {
+    "@types/mocha": "5.2.6",
+    "@types/node": "11.9.6",
+    "assert": "1.4.1",
+    "eslint": "5.14.1",
+    "eslint-config-ns": "0.3.0",
+    "husky": "1.3.1",
+    "lint-staged": "8.1.5",
+    "prettier": "1.16.4",
+    "typescript": "3.3.3333",
+    "vscode": "1.1.30"
+  }
+}
