@@ -26,19 +26,33 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.sayHello"
+    "*"
   ],
   "contributes": {
     "commands": [
       {
         "command": "extension.sayHello",
+        "category": "Toggl",
         "title": "Hello World"
+      },
+      {
+        "command": "extension.selectedLines",
+        "category": "Toggl",
+        "title": "Selected Lines"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "vs-code-toggl-extension configuration",
+      "title": "Toggl",
       "properties": {
+        "toggl.apiKey": {
+          "type": "string",
+          "description": "Your toggl.com API Key. You can get it from here: https://www.toggl.com/app/profile"
+        },
+        "toggl.defaultProjectId": {
+          "type": "integer",
+          "description": "Default project (client) id for each created task. Note: currently it is not possible to select from a list of projects."
+        },
         "vscodens.text": {
           "type": "string",
           "default": "Hello World :)",
@@ -81,7 +95,10 @@
     "lint-staged": "8.1.5",
     "prettier": "1.16.4",
     "rimraf": "2.6.3",
-    "source-map-support": "0.5.10",
+    "source-map-support": "0.5.10"
+  },
+  "dependencies": {
+    "toggl-api": "1.0.1",
     "vscode": "1.1.30"
   }
 }

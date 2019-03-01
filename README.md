@@ -43,6 +43,12 @@ other VS Code instance is running.
 [Jest](https://jestjs.io/) is used for testing, and the implementation is
 [inspired by the Unibeautify/vscode package](https://github.com/Unibeautify/vscode/tree/82e360ff73516c213fea0fa6c2740f0cd53d581b/test).
 
+## Helpful links
+
+- [VS Code API](https://code.visualstudio.com/api/references/vscode-api)
+- [Contribution Points](https://code.visualstudio.com/api/references/contribution-points)
+- [Extension Manifest](https://code.visualstudio.com/api/references/extension-manifest)
+
 ## Licence
 
 [MIT](./LICENCE)
