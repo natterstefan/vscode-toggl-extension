@@ -48,6 +48,13 @@ other VS Code instance is running.
 - [VS Code API](https://code.visualstudio.com/api/references/vscode-api)
 - [Contribution Points](https://code.visualstudio.com/api/references/contribution-points)
 - [Extension Manifest](https://code.visualstudio.com/api/references/extension-manifest)
+- [Activation Events](https://code.visualstudio.com/api/references/activation-events)
+- [Your first VS Code extension by Christian Brevik](https://blog.novanet.no/your-first-vs-code-extension/)
+
+### Commands
+
+- [Extension Guide #Command](https://code.visualstudio.com/api/extension-guides/command)
+- [API References #Commands](https://code.visualstudio.com/api/references/vscode-api#commands)
 
 ## Licence
 

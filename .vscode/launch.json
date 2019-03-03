@@ -18,6 +18,9 @@
         "--extensionDevelopmentPath=${workspaceRoot}",
         "${workspaceRoot}/test-project"
       ],
+      "outFiles": [
+        "dist"
+      ],
       "preLaunchTask": "build"
     },
     {
@@ -27,8 +30,11 @@
       "runtimeExecutable": "${execPath}",
       "args": [
         "--disable-extensions",
-        "--extensionDevelopmentPath=${workspaceRoot}",
+        "--extensionDevelopmentPath=${workspaceRoot}/dist",
         "--extensionTestsPath=${workspaceRoot}/dist-test"
+      ],
+      "outFiles": [
+        "dist"
       ],
       "preLaunchTask": "build"
     }

@@ -1,17 +1,27 @@
-const vscode = require('vscode') // eslint-disable-line
+/**
+ * Docs
+ * - https://code.visualstudio.com/api/extension-guides/command#creating-new-commands
+ */
+import { commands, window, workspace } from 'vscode' // eslint-disable-line
 
-function initCommands(context) {
-  // The command has been defined in the package.json file
-  // The commandId parameter must match the command field in package.json
-  const disposable = vscode.commands.registerCommand(
-    'extension.sayHello',
-    () => {
-      const text = vscode.workspace.getConfiguration().get('vscodens.text')
-      vscode.window.showInformationMessage(text)
-    },
-  )
+class Commands {
+  constructor(context) {
+    this.context = context
+  }
 
-  context.subscriptions.push(disposable)
+  initCommands() {
+    // The command has been defined in the package.json file
+    // The commandId parameter must match the command field in package.json
+    const command = 'vscodetoggl.sayHello'
+    const commandHandler = () => {
+      const text = workspace.getConfiguration().get('vscodens.text')
+      window.showInformationMessage(text)
+    }
+
+    this.context.subscriptions.push(
+      commands.registerCommand(command, commandHandler),
+    )
+  }
 }
 
-module.exports = initCommands
+export default Commands

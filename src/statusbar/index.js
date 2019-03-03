@@ -28,7 +28,7 @@ class StatusBar {
   initStatusbar() {
     // create the statusbar
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
-    this.status.command = 'extension.selectedLines'
+    this.status.command = 'vscodetoggl.selectedLines'
     this.context.subscriptions.push(this.status)
 
     // NOTE: Example events
@@ -48,8 +48,10 @@ class StatusBar {
     //   workspace.onDidCloseTextDocument(() => this.updateStatus()),
     // )
 
+    // register command
+    // TODO: register commands in ../commands/index.js
     this.context.subscriptions.push(
-      commands.registerCommand('extension.selectedLines', () => {
+      commands.registerCommand('vscodetoggl.selectedLines', () => {
         window.showInformationMessage(this.status.text)
       }),
     )

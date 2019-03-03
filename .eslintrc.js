@@ -12,6 +12,7 @@ module.exports = {
       },
     ],
     'jest/prefer-strict-equal': 'error',
+    'no-console': 0,
     'sort-keys': 0,
   },
   overrides: [
