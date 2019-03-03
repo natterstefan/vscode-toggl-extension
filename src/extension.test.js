@@ -5,6 +5,10 @@
  * Docs
  * - https://code.visualstudio.com/api/working-with-extensions/testing-extension
  *
+ * TODO:
+ * - read https://code.visualstudio.com/api/working-with-extensions/testing-extension
+ *   again and try to find what's needed to fix the issue described below
+ *
  * NOTE - Activation Events
  *
  * - When setting `"activationEvents": ["*"],` in the package.json, I got the

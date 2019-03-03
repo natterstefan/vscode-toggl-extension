@@ -10,43 +10,38 @@
  * - https://code.visualstudio.com/docs/extensions/publish-extension
  *
  * FYI Use the console to output diagnostic information (console.log) and errors (console.error)
+ *
+ * TODO:
+ * - i18n
+ * - logger flag (info, warn, error)
+ * - do not execute commands (start fetching), but show warning, when required
+ *   config values are not set (eg. apiKey)
  */
 import vscode from 'vscode' // eslint-disable-line
+
+import CONSTANTS from './constants'
 import Toggl from './toggl'
 import StatusBar from './statusbar'
 import Commands from './commands'
-import CONSTANTS from './constants'
-
-/**
- * TODO: do not activate, but show warning, wenn required config values are not
- * set (eg. apiKey)
- */
 
 export function activate(context) {
-  // initialise features
+  // initialise available commands and the statusbar
   const commands = new Commands(context)
-  commands.initCommands()
-
   const statusBar = new StatusBar(context)
+  commands.initCommands()
   statusBar.initStatusbar()
 
-  // TODO: create actual command, instead of PoC implementation here
+  // start fetching current time entry and display it in statusbar
   const apiClient = new Toggl(context)
-  apiClient
-    .getCurrentTimeEntry()
-    .then(data => {
-      if (!data) {
-        statusBar.updateStatus(`#relaxMode`)
-        return
-      }
+  apiClient.pollCurrentTimeEntry((err, data) => {
+    if (err) {
+      // ATTENTION: currently we do not restart fetching!
+      console.error(err)
+      return
+    }
 
-      console.log(data) // eslint-disable-line
-      // TODO: think about i18n
-      statusBar.updateStatus(
-        `You are currently working on: ${data.description}`,
-      )
-    })
-    .catch(err => console.log(err)) // eslint-disable-line
+    statusBar.showCurrentTimeFromTogglItem(data)
+  })
 
   console.log(`${CONSTANTS.name} client is activated now...`) // eslint-disable-line
 }

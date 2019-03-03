@@ -7,7 +7,9 @@
   "license": "MIT",
   "version": "0.0.1",
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rimraf dist && rimraf dist-test",
     "build": "npm run clean && babel ./src --ignore **/*.test.js --out-dir dist && babel test --out-dir dist-test",
@@ -20,8 +22,13 @@
   "engines": {
     "vscode": "^1.27.1"
   },
-  "categories": ["Other"],
-  "activationEvents": ["*", "onCommand:toggl.sayHello"],
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*",
+    "onCommand:toggl.sayHello"
+  ],
   "contributes": {
     "commands": [
       {
@@ -47,6 +54,11 @@
           "default": 40,
           "description": "Number of hours you have to work each week."
         },
+        "toggl.pollingTimeout": {
+          "type": "integer",
+          "default": 10,
+          "description": "Number of seconds between polling current time entry data from Toggl. To not run into the API rate limit it cannot be below 10 seconds."
+        },
         "toggl.text": {
           "type": "string",
           "default": "Hello World :)",
@@ -61,7 +73,11 @@
     }
   },
   "lint-staged": {
-    "*.js": ["prettier --write", "npm run lint-fix", "git update-index --again"]
+    "*.js": [
+      "prettier --write",
+      "npm run lint-fix",
+      "git update-index --again"
+    ]
   },
   "repository": {
     "type": "git",
@@ -88,6 +104,7 @@
     "source-map-support": "0.5.10"
   },
   "dependencies": {
+    "moment": "2.24.0",
     "toggl-api": "1.0.1",
     "vscode": "1.1.30"
   }

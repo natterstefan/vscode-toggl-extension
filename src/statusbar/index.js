@@ -5,7 +5,6 @@
  * Docs
  * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
  */
-// eslint-disable-line
 import { StatusBarAlignment, window, commands } from 'vscode' // eslint-disable-line
 import { createElementName } from '../utils'
 
@@ -13,6 +12,11 @@ class StatusBar {
   constructor(context) {
     this.context = context
     this.text = ''
+
+    // bindings
+    this.showCurrentTimeFromTogglItem = this.showCurrentTimeFromTogglItem.bind(
+      this,
+    )
   }
 
   initStatusbar() {
@@ -31,8 +35,8 @@ class StatusBar {
     this.updateStatus()
   }
 
-  updateStatus(customText) {
-    this.text = customText || ''
+  updateStatus(text) {
+    this.text = text || ''
 
     if (this.text) {
       this.status.text = `$(watch) ${this.text}` // only statusbar is capable of displaying emojis
@@ -40,6 +44,19 @@ class StatusBar {
     } else {
       this.status.hide()
     }
+  }
+
+  showCurrentTimeFromTogglItem(togglItem) {
+    if (!togglItem) {
+      this.updateStatus('You are not tracking your time right now.')
+      return
+    }
+
+    this.updateStatus(
+      `Currently tracking "${togglItem.description}" (${
+        togglItem.durationText
+      })`,
+    )
   }
 }
 
