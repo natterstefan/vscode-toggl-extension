@@ -12,10 +12,10 @@
  * FYI Use the console to output diagnostic information (console.log) and errors (console.error)
  */
 import vscode from 'vscode' // eslint-disable-line
-
 import Toggl from './toggl'
 import StatusBar from './statusbar'
 import Commands from './commands'
+import CONSTANTS from './constants'
 
 /**
  * TODO: do not activate, but show warning, wenn required config values are not
@@ -23,9 +23,6 @@ import Commands from './commands'
  */
 
 export function activate(context) {
-  // TODO: add .activate setting (bool), so people are not forced to deinstall
-  // extension, but can disable it first
-
   // initialise features
   const commands = new Commands(context)
   commands.initCommands()
@@ -50,6 +47,8 @@ export function activate(context) {
       )
     })
     .catch(err => console.log(err)) // eslint-disable-line
+
+  console.log(`${CONSTANTS.name} client is activated now...`) // eslint-disable-line
 }
 
 // eslint disable-next-line no-empty

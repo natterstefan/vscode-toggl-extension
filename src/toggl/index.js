@@ -1,13 +1,12 @@
+import { window, workspace } from 'vscode' // eslint-disable-line
 import TogglClient from 'toggl-api'
 
 import CONSTANTS from '../constants'
 
-import { window, workspace } from 'vscode' // eslint-disable-line
-
 const ERRORS = {
   missingApiToken: `${
     CONSTANTS.name
-  }: Please configure your API token, before using the extensions.`,
+  }: Please configure your API token, before using the extension.`,
 }
 
 /**
@@ -17,15 +16,15 @@ const ERRORS = {
  */
 export class TogglApiClient {
   constructor(context) {
+    // setup client based on settings
+    this.prepareClient()
+
     // make sure we know when the user changed the settings to receive/determine
     // a new api token
     // TODO: remove listener?
     context.subscriptions.push(
       workspace.onDidChangeConfiguration(() => this.prepareClient()),
     )
-
-    // setup client based on settings
-    this.prepareClient()
   }
 
   // SETUP
@@ -47,8 +46,6 @@ export class TogglApiClient {
     this.apiClient = new TogglClient({
       apiToken: this.apiToken,
     })
-
-    console.log(`${CONSTANTS.name} client is activated now...`) // eslint-disable-line
   }
 
   // API HANDLERS

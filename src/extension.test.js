@@ -2,6 +2,9 @@
  * inspired by
  * - https://github.com/Unibeautify/vscode/blob/82e360ff73516c213fea0fa6c2740f0cd53d581b/test/extension.test.ts
  *
+ * Docs
+ * - https://code.visualstudio.com/api/working-with-extensions/testing-extension
+ *
  * NOTE - Activation Events
  *
  * - When setting `"activationEvents": ["*"],` in the package.json, I got the
@@ -18,6 +21,10 @@
  * - when setting the Activation Events to `"activationEvents": [onCommand:vscodetoggl.sayHello"],``
  *   (or any other event name) it works fine, _but_ the extension is then not
  *   activated on startup.
+ *
+ * Issues
+ * - https://github.com/Microsoft/vscode/issues/55340
+ * - https://github.com/Microsoft/vscode/issues/53295
  */
 import { activate } from './extension'
 

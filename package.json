@@ -21,12 +21,12 @@
     "vscode": "^1.27.1"
   },
   "categories": ["Other"],
-  "activationEvents": ["*", "onCommand:vscodetoggl.sayHello"],
+  "activationEvents": ["*", "onCommand:toggl.sayHello"],
   "contributes": {
     "commands": [
       {
         "category": "Toggl",
-        "command": "vscodetoggl.sayHello",
+        "command": "toggl.sayHello",
         "title": "Hello World"
       }
     ],
@@ -42,7 +42,12 @@
           "type": "integer",
           "description": "Default project (client) id for each created task. Note: currently it is not possible to select from a list of projects."
         },
-        "vscodens.text": {
+        "toggl.hoursPerWeek": {
+          "type": "integer",
+          "default": 40,
+          "description": "Number of hours you have to work each week."
+        },
+        "toggl.text": {
           "type": "string",
           "default": "Hello World :)",
           "description": "Text"

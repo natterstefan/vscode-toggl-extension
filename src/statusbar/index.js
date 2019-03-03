@@ -1,58 +1,30 @@
-// based on https://github.com/Microsoft/vscode-extension-samples/tree/master/statusbar-sample
-const { StatusBarAlignment, window, workspace, commands } = require('vscode') // eslint-disable-line
-
-// TODO: remove example from yeoman generated template
-function getSelectedLines() {
-  const editor = window.activeTextEditor
-  let text
-
-  if (editor) {
-    let lines = 0
-    editor.selections.forEach(selection => {
-      lines += selection.end.line - selection.start.line + 1
-    })
-
-    if (lines > 0) {
-      text = `${lines} line(s) selected!`
-    }
-  }
-
-  return text
-}
+/**
+ * Originally inspired by
+ * - https://github.com/Microsoft/vscode-extension-samples/tree/8ea86205551f2b0c5cad2712c2c4a7c1b6e2a4cd/statusbar-sample
+ *
+ * Docs
+ * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
+ */
+// eslint-disable-line
+import { StatusBarAlignment, window, commands } from 'vscode' // eslint-disable-line
+import { createElementName } from '../utils'
 
 class StatusBar {
   constructor(context) {
     this.context = context
+    this.text = ''
   }
 
   initStatusbar() {
-    // create the statusbar
+    // create the StatusBar with command onClick
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
-    this.status.command = 'vscodetoggl.selectedLines'
+    this.status.command = createElementName('statusbarClicked')
     this.context.subscriptions.push(this.status)
 
-    // NOTE: Example events
-    // this.context.subscriptions.push(
-    //   window.onDidChangeActiveTextEditor(() => this.updateStatus()),
-    // )
-    // this.context.subscriptions.push(
-    //   window.onDidChangeTextEditorSelection(() => this.updateStatus()),
-    // )
-    // this.context.subscriptions.push(
-    //   window.onDidChangeTextEditorViewColumn(() => this.updateStatus()),
-    // )
-    // this.context.subscriptions.push(
-    //   workspace.onDidOpenTextDocument(() => this.updateStatus()),
-    // )
-    // this.context.subscriptions.push(
-    //   workspace.onDidCloseTextDocument(() => this.updateStatus()),
-    // )
-
-    // register command
-    // TODO: register commands in ../commands/index.js
+    // register command (currently not exposed in command palette)
     this.context.subscriptions.push(
-      commands.registerCommand('vscodetoggl.selectedLines', () => {
-        window.showInformationMessage(this.status.text)
+      commands.registerCommand(this.status.command, () => {
+        window.showInformationMessage(this.text)
       }),
     )
 
@@ -60,13 +32,10 @@ class StatusBar {
   }
 
   updateStatus(customText) {
-    const text = customText || getSelectedLines()
+    this.text = customText || ''
 
-    if (text) {
-      this.status.text = `$(megaphone) ${text}` // eslint-disable-line
-    }
-
-    if (text) {
+    if (this.text) {
+      this.status.text = `$(watch) ${this.text}` // only statusbar is capable of displaying emojis
       this.status.show()
     } else {
       this.status.hide()

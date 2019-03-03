@@ -10,7 +10,7 @@ Track your working hours in Toggl directly in your VS Code.
 
 ```sh
 node ^10.14.2
-vs code ^1.27.1
+vscode ^1.27.1
 ```
 
 ## Extension Settings
@@ -18,10 +18,7 @@ vs code ^1.27.1
 Currently the extension does only adds a few VS Code settings through
 the `contributes.configuration` extension point.
 
-For example:
-
-- `vscodens.text`: defines the text for the HelloWorld command (Default:
-  "Hello World :)")
+- WIP
 
 ## How to develop
 
