@@ -5,7 +5,8 @@
  * Docs
  * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
  */
-import { StatusBarAlignment, window, commands, Uri } from 'vscode' // eslint-disable-line
+import { StatusBarAlignment, window } from 'vscode' // eslint-disable-line
+import { createElementName } from '../utils'
 
 class StatusBar {
   constructor(context) {
@@ -21,11 +22,7 @@ class StatusBar {
   initStatusbar() {
     // create the StatusBar with command onClick
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
-    this.status.command = () =>
-      commands.executeCommand(
-        'vscode.open',
-        Uri.parse('https://toggl.com/app/timer'),
-      )
+    this.status.command = createElementName('openToggl')
     this.context.subscriptions.push(this.status)
 
     // reset bar (show initial state)

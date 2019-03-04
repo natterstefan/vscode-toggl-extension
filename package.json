@@ -43,6 +43,11 @@
         "category": "Toggl",
         "command": "toggl.stopEntry",
         "title": "Stop current Entry"
+      },
+      {
+        "category": "Toggl",
+        "command": "toggl.openToggl",
+        "title": "Open Toggl Timer (Browser)"
       }
     ],
     "configuration": {

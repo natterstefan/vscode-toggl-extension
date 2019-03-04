@@ -3,6 +3,9 @@
  * - https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/errors.js
  *
  * use error.toJSON() to get all details of an error
+ *
+ * TODO:
+ * - properly implement and use everywhere (eg. in all catch cases)
  */
 import createCustomError from 'custom-error-generator'
 

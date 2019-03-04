@@ -130,19 +130,22 @@ export class TogglApiClient {
     })
   }
 
-  stopTimeEntry() {
+  async stopTimeEntry() {
     // docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L152-L165
-    return this.getCurrentTimeEntry().then(togglItem => {
-      return new Promise((resolve, reject) => {
-        const { id } = togglItem
-        this.apiClient.stopTimeEntry(id, error => {
-          if (error) {
-            reject(error)
-            return
-          }
+    const togglItem = await this.getCurrentTimeEntry()
+    return new Promise((resolve, reject) => {
+      if (!togglItem) {
+        reject(new Error('No current Entry available'))
+        return
+      }
 
-          resolve()
-        })
+      const { id } = togglItem
+      this.apiClient.stopTimeEntry(id, error => {
+        if (error) {
+          reject(error)
+          return
+        }
+        resolve()
       })
     })
   }
@@ -164,8 +167,9 @@ export class TogglApiClient {
         // send result to callback
         cb(null, result)
 
+        // TODO: make sure someone can stop polling
         // and start next polling cycle
-        poller.poll() // Go for the next poll
+        poller.poll()
       } catch (error) {
         cb(error, null)
       }

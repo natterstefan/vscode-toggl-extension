@@ -17,40 +17,35 @@
  * - do not execute commands (start fetching), but show warning, when required
  *   config values are not set (eg. apiKey)
  */
-import { window } from 'vscode' // eslint-disable-line
+import { commands as commandsHandler, window } from 'vscode' // eslint-disable-line
 
 import CONSTANTS from './constants'
 import Toggl from './toggl'
 import StatusBar from './statusbar'
 import Commands from './commands'
+import { createElementName } from './utils'
 
 export function activate(context) {
   try {
-    console.log(`${CONSTANTS.name} client is going to be activated...`) // eslint-disable-line
+    console.log(`${CONSTANTS.name} is activating...`) // eslint-disable-line
 
     // set up available commands and the statusbar
-    const apiClient = new Toggl(context)
+    const togglClient = new Toggl(context)
     const statusBar = new StatusBar(context)
-    const commands = new Commands(context, apiClient, statusBar)
+    const commands = new Commands(context, togglClient, statusBar)
 
     // init all features
     commands.initCommands()
     statusBar.initStatusbar()
 
-    // start fetching current time entry and display it in statusbar
-    apiClient.pollCurrentTimeEntry((err, data) => {
-      if (err) {
-        // ATTENTION: currently we do not restart fetching!
-        console.error(err)
-        return
-      }
+    // start polling
+    const commandId = createElementName('startPolling')
+    commandsHandler.executeCommand(commandId) // promise
 
-      statusBar.showCurrentTimeFromTogglItem(data)
-    })
-
-    console.log(`${CONSTANTS.name} client is activated now...`) // eslint-disable-line
+    // log successfull start
+    console.log(`${CONSTANTS.name} is activated now...`) // eslint-disable-line
   } catch (error) {
-    // handle all catched errors during activation here
+    // TODO: handle all catched errors during activation _and_ execution here!
     console.error(error)
     window.showErrorMessage(error.text)
   }
