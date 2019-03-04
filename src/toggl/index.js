@@ -1,29 +1,10 @@
-import { window, workspace } from 'vscode' // eslint-disable-line
+import { workspace } from 'vscode' // eslint-disable-line
 import TogglClient from 'toggl-api'
 import moment from 'moment'
 
-import CONSTANTS from '../constants'
+import { SettingsError } from '../errors'
 import Poller from '../utils/poller'
 import { getExtensionSetting } from '../utils'
-
-const ERRORS = {
-  missingApiToken: `${
-    CONSTANTS.name
-  }: Please configure your API token, before using the extension.`,
-}
-
-const prepareTogglItem = item => {
-  // prepare a readable duration text
-  const duration = item.duration
-    ? (Date.now() / 1000 + item.duration) * 1000
-    : 0
-  const durationText = moment.duration(duration).humanize()
-
-  return {
-    ...item,
-    durationText,
-  }
-}
 
 /**
  * TogglApiClient
@@ -46,17 +27,15 @@ export class TogglApiClient {
   // SETUP
   prepareClient() {
     // create new toggl client
-    this.apiToken = workspace.getConfiguration().get('toggl.apiKey')
+    const settingName = 'apiKey'
+    this.apiToken = getExtensionSetting(settingName)
 
     if (!this.apiToken) {
-      window.showErrorMessage(ERRORS.missingApiToken)
-      return
+      throw new SettingsError(settingName)
     }
 
     // update the project details
-    this.defaultProjectId = workspace
-      .getConfiguration()
-      .get('toggl.defaultProjectId')
+    this.defaultProjectId = getExtensionSetting('defaultProjectId')
 
     // and (re-)create the api client
     this.apiClient = new TogglClient({
@@ -64,14 +43,67 @@ export class TogglApiClient {
     })
   }
 
+  // UTILS
+  buildTogglItem(description) {
+    // in the future other flags like billable could be added as well
+    return {
+      description,
+      pid: this.defaultProjectId,
+    }
+  }
+
+  buildHumanizedTogglItem(item) {
+    if (!item) {
+      return null
+    }
+
+    // prepare a readable duration text
+    const duration = item.duration
+      ? (Date.now() / 1000 + item.duration) * 1000
+      : 0
+    const durationText = moment.duration(duration).humanize()
+
+    return {
+      ...item,
+      durationText,
+    }
+  }
+
   // API HANDLERS
+  getAllEntries() {
+    return new Promise((resolve, reject) => {
+      // docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L72-L105
+      // params: startDate, endDate, callback
+      this.apiClient.getTimeEntries(undefined, undefined, (err, togglItems) => {
+        if (err) {
+          reject(err)
+          return
+        }
+
+        if (togglItems === []) {
+          resolve([])
+          return
+        }
+
+        // resolve unique entries (https://stackoverflow.com/a/14438954/1238150)
+        const entries = togglItems
+          .map(this.buildHumanizedTogglItem)
+          .filter(item => !!(item && item.description))
+          .filter(
+            (value, index, self) =>
+              self.findIndex(elem => elem.description === value.description) ===
+              index,
+          )
+        resolve(entries)
+      })
+    })
+  }
+
   getCurrentTimeEntry() {
     return new Promise((resolve, reject) => {
       if (!this.apiClient) {
-        reject(ERRORS.missingApiToken)
-        return
+        throw new SettingsError()
       }
-      console.log('fetching data from toggl...')
 
       this.apiClient.getCurrentTimeEntry((error, togglItem) => {
         if (error) {
@@ -79,15 +111,46 @@ export class TogglApiClient {
           return
         }
 
-        console.log('received data from toggl...')
-        resolve(prepareTogglItem(togglItem))
+        resolve(this.buildHumanizedTogglItem(togglItem))
       })
     })
   }
 
+  startTimeEntry(newTogglItem) {
+    // docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L129-L149
+    return new Promise((resolve, reject) => {
+      this.apiClient.startTimeEntry(newTogglItem, (error, togglItem) => {
+        if (error) {
+          reject(error)
+          return
+        }
+
+        resolve(this.buildHumanizedTogglItem(togglItem))
+      })
+    })
+  }
+
+  stopTimeEntry() {
+    // docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L152-L165
+    return this.getCurrentTimeEntry().then(togglItem => {
+      return new Promise((resolve, reject) => {
+        const { id } = togglItem
+        this.apiClient.stopTimeEntry(id, error => {
+          if (error) {
+            reject(error)
+            return
+          }
+
+          resolve()
+        })
+      })
+    })
+  }
+
+  // POLLING HANDLERS
   pollCurrentTimeEntry(cb) {
-    const timeout = getExtensionSetting('pollingTimeout') * 1000 || 10000
-    const safeTimeout = timeout < 10000 ? 10000 : timeout // min 10s to not reach the rate-limit
+    const timeout = getExtensionSetting('pollingTimeout') * 1000 || 3000
+    const safeTimeout = timeout < 3000 ? 3000 : timeout // min 3s to not reach the rate-limit
 
     // note: this is previous request + processing time + timeout
     const poller = new Poller(safeTimeout)

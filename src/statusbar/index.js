@@ -5,8 +5,7 @@
  * Docs
  * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
  */
-import { StatusBarAlignment, window, commands } from 'vscode' // eslint-disable-line
-import { createElementName } from '../utils'
+import { StatusBarAlignment, window, commands, Uri } from 'vscode' // eslint-disable-line
 
 class StatusBar {
   constructor(context) {
@@ -22,17 +21,15 @@ class StatusBar {
   initStatusbar() {
     // create the StatusBar with command onClick
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
-    this.status.command = createElementName('statusbarClicked')
+    this.status.command = () =>
+      commands.executeCommand(
+        'vscode.open',
+        Uri.parse('https://toggl.com/app/timer'),
+      )
     this.context.subscriptions.push(this.status)
 
-    // register command (currently not exposed in command palette)
-    this.context.subscriptions.push(
-      commands.registerCommand(this.status.command, () => {
-        window.showInformationMessage(this.text)
-      }),
-    )
-
-    this.updateStatus()
+    // reset bar (show initial state)
+    this.resetBar()
   }
 
   updateStatus(text) {
@@ -46,9 +43,13 @@ class StatusBar {
     }
   }
 
+  resetBar() {
+    this.updateStatus('You are not tracking your time right now.')
+  }
+
   showCurrentTimeFromTogglItem(togglItem) {
     if (!togglItem) {
-      this.updateStatus('You are not tracking your time right now.')
+      this.resetBar()
       return
     }
 

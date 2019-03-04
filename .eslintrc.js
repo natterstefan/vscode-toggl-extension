@@ -4,6 +4,7 @@ module.exports = {
     node: true,
   },
   rules: {
+    'class-methods-use-this': 0,
     'jest/consistent-test-it': [
       'error',
       {

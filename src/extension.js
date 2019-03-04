@@ -17,7 +17,7 @@
  * - do not execute commands (start fetching), but show warning, when required
  *   config values are not set (eg. apiKey)
  */
-import vscode from 'vscode' // eslint-disable-line
+import { window } from 'vscode' // eslint-disable-line
 
 import CONSTANTS from './constants'
 import Toggl from './toggl'
@@ -25,25 +25,35 @@ import StatusBar from './statusbar'
 import Commands from './commands'
 
 export function activate(context) {
-  // initialise available commands and the statusbar
-  const commands = new Commands(context)
-  const statusBar = new StatusBar(context)
-  commands.initCommands()
-  statusBar.initStatusbar()
+  try {
+    console.log(`${CONSTANTS.name} client is going to be activated...`) // eslint-disable-line
 
-  // start fetching current time entry and display it in statusbar
-  const apiClient = new Toggl(context)
-  apiClient.pollCurrentTimeEntry((err, data) => {
-    if (err) {
-      // ATTENTION: currently we do not restart fetching!
-      console.error(err)
-      return
-    }
+    // set up available commands and the statusbar
+    const apiClient = new Toggl(context)
+    const statusBar = new StatusBar(context)
+    const commands = new Commands(context, apiClient, statusBar)
 
-    statusBar.showCurrentTimeFromTogglItem(data)
-  })
+    // init all features
+    commands.initCommands()
+    statusBar.initStatusbar()
 
-  console.log(`${CONSTANTS.name} client is activated now...`) // eslint-disable-line
+    // start fetching current time entry and display it in statusbar
+    apiClient.pollCurrentTimeEntry((err, data) => {
+      if (err) {
+        // ATTENTION: currently we do not restart fetching!
+        console.error(err)
+        return
+      }
+
+      statusBar.showCurrentTimeFromTogglItem(data)
+    })
+
+    console.log(`${CONSTANTS.name} client is activated now...`) // eslint-disable-line
+  } catch (error) {
+    // handle all catched errors during activation here
+    console.error(error)
+    window.showErrorMessage(error.text)
+  }
 }
 
 // eslint disable-next-line no-empty

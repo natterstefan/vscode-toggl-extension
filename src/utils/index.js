@@ -1,6 +1,6 @@
-import CONSTANTS from '../constants'
-
 import { workspace } from 'vscode' // eslint-disable-line
+
+import CONSTANTS from '../constants'
 
 export const createElementName = name => `${CONSTANTS.prefix}.${name}`
 
