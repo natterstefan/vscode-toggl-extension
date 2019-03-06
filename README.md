@@ -1,27 +1,43 @@
 # Toggl Extension for VSCode
 
-Track your working hours in Toggl directly in your VS Code.
+Track your working hours in Toggl directly in your VS Code. :watch:
+
+## Features and Commands
+
+## Commands
+
+- `toggl.startEntry`: starts a new entry on toggl.com with the provided input
+- `toggl.startExistingEntry` starts an existing entry on toggl
+- `toggl.stopEntry`: stops the current entry
+- `toggl.openToggl`: opens [toggl.com](https://toggl.com/app/timer) in the browser
 
 ## Features
 
-- WIP
-
-## Requirements
-
-```sh
-node ^10.14.2
-vs code ^1.27.1
-```
+- status bar shows current task and opens toggl.com when clicked
+- Polling: fetches data periodically from toggl to show the current task in the
+  status bar
 
 ## Extension Settings
 
-Currently the extension does only adds a few VS Code settings through
-the `contributes.configuration` extension point.
+Currently the extension does provide the following settings:
 
-For example:
+- `toggl.apiKey`: your [private API key](https://www.toggl.com/app/profile)
+- `toggl.defaultProjectId`: all created tasks will use this as assigned project.
+  You can [get the id from the projects overview](https://www.toggl.com/app/projects).
+  Simply select the project and obtain the id from the url. Example: the id of
+  `https://www.toggl.com/app/projects/xxxxx/edit/12345678` would be `12345678`
+- `toggl.pollingTimeout` (Default: 3): timeout between polling intervals, when the extension
+  fetchs the latest current task from toggl. In order to not hit [toggl's rate limit](https://github.com/toggl/toggl_api_docs#the-api-format)
+  you cannot set it below 3 seconds.
 
-- `vscodens.text`: defines the text for the HelloWorld command (Default:
-  "Hello World :)")
+## Development & Contribution
+
+### Requirements
+
+```sh
+node ^10.14.2
+vscode ^1.27.1
+```
 
 ## How to develop
 
@@ -43,9 +59,44 @@ other VS Code instance is running.
 [Jest](https://jestjs.io/) is used for testing, and the implementation is
 [inspired by the Unibeautify/vscode package](https://github.com/Unibeautify/vscode/tree/82e360ff73516c213fea0fa6c2740f0cd53d581b/test).
 
+## Helpful links
+
+### Tutorials
+
+- [Your first VS Code extension by Christian Brevik](https://blog.novanet.no/your-first-vs-code-extension/)
+
+### Configuration and API
+
+- [VS Code API](https://code.visualstudio.com/api/references/vscode-api)
+- [Contribution Points](https://code.visualstudio.com/api/references/contribution-points)
+- [Extension Manifest](https://code.visualstudio.com/api/references/extension-manifest)
+- [Activation Events](https://code.visualstudio.com/api/references/activation-events)
+
+### Commands
+
+- [Extension Guide #Command](https://code.visualstudio.com/api/extension-guides/command)
+- [API References #Commands](https://code.visualstudio.com/api/references/vscode-api#commands)
+
+### Publishing
+
+- [Publishing](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions)
+
+## Tools
+
+I have not yet tested these tools, but I'll keep them here for the future.
+
+- [vscode-helpers](https://www.npmjs.com/package/vscode-helpers)
+
+## Todos and Ideas
+
+There are some further ideas and tasks left to make this extension better. You
+can take a look at the [projects](https://github.com/natterstefan/vscode-toggl-extension/projects)
+tab to see what I have in mind, planned and what is still left. Feel free to
+contribute! :muscle:
+
 ## Licence
 
-[MIT](./LICENCE)
+[Apache 2.0](./LICENCE)
 
 This extension is not affiliated, associated, authorized, endorsed by or in any
 way officially connected to Toggl ([toggl.com](https://toggl.com)).

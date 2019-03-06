@@ -4,12 +4,10 @@
   "description": "Track your working hours in Toggl directly in your VS Code.",
   "author": "Stefan Natter",
   "publisher": "natterstefan",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "version": "0.0.1",
   "main": "./dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "clean": "rimraf dist && rimraf dist-test",
     "build": "npm run clean && babel ./src --ignore **/*.test.js --out-dir dist && babel test --out-dir dist-test",
@@ -22,27 +20,52 @@
   "engines": {
     "vscode": "^1.27.1"
   },
-  "categories": [
-    "Other"
-  ],
+  "categories": ["Other"],
   "activationEvents": [
-    "onCommand:extension.sayHello"
+    "*",
+    "onCommand:toggl.startEntry",
+    "onCommand:toggl.startExistingEntry",
+    "onCommand:toggl.stopEntry"
   ],
   "contributes": {
     "commands": [
       {
-        "command": "extension.sayHello",
-        "title": "Hello World"
+        "category": "Toggl",
+        "command": "toggl.startEntry",
+        "title": "Start with new Entry"
+      },
+      {
+        "category": "Toggl",
+        "command": "toggl.startExistingEntry",
+        "title": "Start with existing Entry"
+      },
+      {
+        "category": "Toggl",
+        "command": "toggl.stopEntry",
+        "title": "Stop current Entry"
+      },
+      {
+        "category": "Toggl",
+        "command": "toggl.openToggl",
+        "title": "Open Toggl Timer (Browser)"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "vs-code-toggl-extension configuration",
+      "title": "Toggl",
       "properties": {
-        "vscodens.text": {
+        "toggl.apiKey": {
           "type": "string",
-          "default": "Hello World :)",
-          "description": "Text"
+          "description": "Your toggl.com API Key. You can get it from here: https://www.toggl.com/app/profile"
+        },
+        "toggl.defaultProjectId": {
+          "type": "integer",
+          "description": "Default project (client) id for each created task. Note: currently it is not possible to select from a list of projects."
+        },
+        "toggl.pollingTimeout": {
+          "type": "integer",
+          "default": 3,
+          "description": "Number of seconds between polling current time entry data from Toggl. To not run into the API rate limit it cannot be below 3 seconds."
         }
       }
     }
@@ -53,11 +76,7 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "npm run lint-fix",
-      "git update-index --again"
-    ]
+    "*.js": ["prettier --write", "npm run lint-fix", "git update-index --again"]
   },
   "repository": {
     "type": "git",
@@ -70,10 +89,11 @@
   "devDependencies": {
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.4",
+    "@babel/plugin-proposal-class-properties": "7.3.4",
     "@babel/preset-env": "7.3.4",
     "babel-jest": "24.1.0",
     "cross-env": "5.2.0",
-    "eslint": "5.14.1",
+    "eslint": "5.15.1",
     "eslint-config-ns": "0.3.0",
     "husky": "1.3.1",
     "jest": "24.1.0",
@@ -81,7 +101,12 @@
     "lint-staged": "8.1.5",
     "prettier": "1.16.4",
     "rimraf": "2.6.3",
-    "source-map-support": "0.5.10",
+    "source-map-support": "0.5.10"
+  },
+  "dependencies": {
+    "custom-error-generator": "7.0.0",
+    "moment": "2.24.0",
+    "toggl-api": "1.0.1",
     "vscode": "1.1.30"
   }
 }

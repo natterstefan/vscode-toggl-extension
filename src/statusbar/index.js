@@ -1,65 +1,61 @@
-// based on https://github.com/Microsoft/vscode-extension-samples/tree/master/statusbar-sample
-const { StatusBarAlignment, window, workspace, commands } = require('vscode') // eslint-disable-line
+/**
+ * Originally inspired by
+ * - https://github.com/Microsoft/vscode-extension-samples/tree/8ea86205551f2b0c5cad2712c2c4a7c1b6e2a4cd/statusbar-sample
+ *
+ * Docs
+ * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
+ */
+import { StatusBarAlignment, window } from 'vscode' // eslint-disable-line
+import { createElementName } from '../utils'
 
-function getSelectedLines() {
-  const editor = window.activeTextEditor
-  let text
+class StatusBar {
+  constructor(context) {
+    this.context = context
+    this.text = ''
 
-  if (editor) {
-    let lines = 0
-    editor.selections.forEach(selection => {
-      lines += selection.end.line - selection.start.line + 1
-    })
+    // bindings
+    this.showCurrentTimeFromTogglItem = this.showCurrentTimeFromTogglItem.bind(
+      this,
+    )
+  }
 
-    if (lines > 0) {
-      text = `${lines} line(s) selected!`
+  initStatusbar() {
+    // create the StatusBar with command onClick
+    this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
+    this.status.command = createElementName('openToggl')
+    this.context.subscriptions.push(this.status)
+
+    // reset bar (show initial state)
+    this.resetBar()
+  }
+
+  updateStatus(text) {
+    this.text = text || ''
+
+    if (this.text) {
+      this.status.text = `$(watch) ${this.text}` // only statusbar is capable of displaying emojis
+      this.status.show()
+    } else {
+      this.status.hide()
     }
   }
 
-  return text
-}
-
-function updateStatus(status) {
-  const text = getSelectedLines()
-  if (text) {
-    status.text = `$(megaphone) ${text}` // eslint-disable-line
+  resetBar() {
+    this.updateStatus('You are not tracking your time right now.')
   }
 
-  if (text) {
-    status.show()
-  } else {
-    status.hide()
+  showCurrentTimeFromTogglItem(togglItem) {
+    if (!togglItem) {
+      this.resetBar()
+      return
+    }
+
+    this.updateStatus(
+      `Currently tracking "${togglItem.description}" (${
+        togglItem.durationText
+      })`,
+    )
   }
 }
 
-function initStatusbar(context) {
-  const status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
-  status.command = 'extension.selectedLines'
-  context.subscriptions.push(status)
-
-  context.subscriptions.push(
-    window.onDidChangeActiveTextEditor(() => updateStatus(status)),
-  )
-  context.subscriptions.push(
-    window.onDidChangeTextEditorSelection(() => updateStatus(status)),
-  )
-  context.subscriptions.push(
-    window.onDidChangeTextEditorViewColumn(() => updateStatus(status)),
-  )
-  context.subscriptions.push(
-    workspace.onDidOpenTextDocument(() => updateStatus(status)),
-  )
-  context.subscriptions.push(
-    workspace.onDidCloseTextDocument(() => updateStatus(status)),
-  )
-
-  context.subscriptions.push(
-    commands.registerCommand('extension.selectedLines', () => {
-      window.showInformationMessage(getSelectedLines())
-    }),
-  )
-
-  updateStatus(status)
-}
-
-module.exports = initStatusbar
+export default StatusBar
