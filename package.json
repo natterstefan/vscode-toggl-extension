@@ -7,7 +7,9 @@
   "license": "Apache-2.0",
   "version": "0.0.1",
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rimraf dist && rimraf dist-test",
     "build": "npm run clean && babel ./src --ignore **/*.test.js --out-dir dist && babel test --out-dir dist-test",
@@ -20,7 +22,9 @@
   "engines": {
     "vscode": "^1.27.1"
   },
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "activationEvents": [
     "*",
     "onCommand:toggl.startEntry",
@@ -76,7 +80,11 @@
     }
   },
   "lint-staged": {
-    "*.js": ["prettier --write", "npm run lint-fix", "git update-index --again"]
+    "*.js": [
+      "prettier --write",
+      "npm run lint-fix",
+      "git update-index --again"
+    ]
   },
   "repository": {
     "type": "git",
@@ -101,12 +109,12 @@
     "lint-staged": "8.1.5",
     "prettier": "1.16.4",
     "rimraf": "2.6.3",
-    "source-map-support": "0.5.10"
+    "source-map-support": "0.5.10",
+    "vscode": "1.1.30"
   },
   "dependencies": {
     "custom-error-generator": "7.0.0",
     "moment": "2.24.0",
-    "toggl-api": "1.0.1",
-    "vscode": "1.1.30"
+    "toggl-api": "1.0.1"
   }
 }
