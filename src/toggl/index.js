@@ -3,13 +3,16 @@ import TogglClient from 'toggl-api'
 import moment from 'moment'
 
 import { SettingsError } from '../errors'
-import Poller from '../utils/poller'
-import { getExtensionSetting } from '../utils'
+import { getExtensionSetting, Poller } from '../utils'
 
 /**
  * TogglApiClient
  *
  * provides several helper methods to easily access the toggl API.
+ *
+ * Docs
+ * - https://github.com/7eggs/node-toggl-api
+ * - https://github.com/toggl/toggl_api_docs
  */
 export class TogglApiClient {
   constructor(context) {
@@ -18,7 +21,6 @@ export class TogglApiClient {
 
     // make sure we know when the user changed the settings to receive/determine
     // a new api token
-    // TODO: remove listener?
     context.subscriptions.push(
       workspace.onDidChangeConfiguration(() => this.prepareClient()),
     )
@@ -69,10 +71,12 @@ export class TogglApiClient {
     }
   }
 
-  // API HANDLERS
+  // API
+  /**
+   * docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L72-L105
+   */
   getAllEntries() {
     return new Promise((resolve, reject) => {
-      // docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L72-L105
       // params: startDate, endDate, callback
       this.apiClient.getTimeEntries(undefined, undefined, (err, togglItems) => {
         if (err) {
@@ -85,7 +89,7 @@ export class TogglApiClient {
           return
         }
 
-        // resolve unique entries (https://stackoverflow.com/a/14438954/1238150)
+        // prepare all togglItems and return only unique ones (https://stackoverflow.com/a/14438954/1238150)
         const entries = togglItems
           .map(this.buildHumanizedTogglItem)
           .filter(item => !!(item && item.description))
@@ -94,11 +98,15 @@ export class TogglApiClient {
               self.findIndex(elem => elem.description === value.description) ===
               index,
           )
+
         resolve(entries)
       })
     })
   }
 
+  /**
+   * docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L108-L117
+   */
   getCurrentTimeEntry() {
     return new Promise((resolve, reject) => {
       if (!this.apiClient) {
@@ -116,8 +124,12 @@ export class TogglApiClient {
     })
   }
 
+  /**
+   * docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L129-L149
+   *
+   * @param {object} newTogglItem
+   */
   startTimeEntry(newTogglItem) {
-    // docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L129-L149
     return new Promise((resolve, reject) => {
       this.apiClient.startTimeEntry(newTogglItem, (error, togglItem) => {
         if (error) {
@@ -130,8 +142,10 @@ export class TogglApiClient {
     })
   }
 
+  /**
+   * docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L152-L165
+   */
   async stopTimeEntry() {
-    // docs: https://github.com/7eggs/node-toggl-api/blob/80d6796422aa71b95fbd5d3fc371c0a203cd9d78/lib/api/time_entries.js#L152-L165
     const togglItem = await this.getCurrentTimeEntry()
     return new Promise((resolve, reject) => {
       if (!togglItem) {
@@ -150,7 +164,13 @@ export class TogglApiClient {
     })
   }
 
-  // POLLING HANDLERS
+  // POLLING
+  /**
+   * pollCurrentTimeEntry: will poll every x-seconds (min. 3) and get the
+   * currently tracked entry from toggl.com
+   *
+   * @param {function} cb
+   */
   pollCurrentTimeEntry(cb) {
     const timeout = getExtensionSetting('pollingTimeout') * 1000 || 3000
     const safeTimeout = timeout < 3000 ? 3000 : timeout // min 3s to not reach the rate-limit
@@ -167,8 +187,7 @@ export class TogglApiClient {
         // send result to callback
         cb(null, result)
 
-        // TODO: make sure someone can stop polling
-        // and start next polling cycle
+        // TODO: make sure invoker of the func can stop polling and restart it
         poller.poll()
       } catch (error) {
         cb(error, null)

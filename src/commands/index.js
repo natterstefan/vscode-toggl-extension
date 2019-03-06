@@ -5,11 +5,17 @@
 import { commands, window, Uri } from 'vscode' // eslint-disable-line
 import { createElementName } from '../utils'
 
+/**
+ * Commands: takes care of implementing and activating VS Code commands
+ *
+ * They can be exposed in the package.json or used by this or other extensions
+ * internally
+ */
 class Commands {
   constructor(context, togglClient, statusBar) {
     this.context = context
     this.togglClient = togglClient
-    this.statusBar = statusBar
+    this.statusBar = statusBar // instance of ../statusbar/index.js
   }
 
   initCommands() {
@@ -27,7 +33,8 @@ class Commands {
   }
 
   doReportMessage(message) {
-    window.showErrorMessage(message)
+    const msg = message || 'An error occured. Please try again.'
+    window.showErrorMessage(msg)
   }
 
   doStart = async description => {
@@ -49,6 +56,7 @@ class Commands {
       window.showInformationMessage(`Started tracking "${description}"`)
     } catch (error) {
       // TODO: handle error properly
+      this.doReportMessage()
       console.error(error)
     }
   }
@@ -62,6 +70,7 @@ class Commands {
       window.showInformationMessage(`Stopped tracking.`)
     } catch (error) {
       // TODO: handle error properly
+      this.doReportMessage()
       console.error(error)
     }
   }
@@ -71,11 +80,12 @@ class Commands {
     const commandHandler = async () => {
       try {
         const result = await window.showInputBox({
-          prompt: 'Enter the Entry Name',
+          prompt: 'Enter the name of the entry',
         })
         this.doStart(result)
       } catch (error) {
         // TODO: handle error properly
+        this.doReportMessage()
         console.error(error)
       }
     }
@@ -97,6 +107,7 @@ class Commands {
           })
       } catch (error) {
         // TODO: handle error properly
+        this.doReportMessage()
         console.error(error)
       }
     }
@@ -115,14 +126,15 @@ class Commands {
     this.context.subscriptions.push(command)
   }
 
-  // TODO: make sure someone can stop polling
   commandPollExistingEntry = () => {
     const commandId = createElementName('startPolling')
     const commandHandler = () => {
+      // TODO: make sure someone can stop & restart polling
       // start fetching current time entry and display it in statusbar
       this.togglClient.pollCurrentTimeEntry((err, data) => {
         if (err) {
           // ATTENTION: currently we do not restart fetching!
+          this.doReportMessage()
           console.error(err)
           return
         }

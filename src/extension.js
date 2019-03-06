@@ -6,9 +6,6 @@
  * - https://code.visualstudio.com/docs/extensions/example-hello-world
  * - https://github.com/Microsoft/vscode-extension-samples
  *
- * Publishing
- * - https://code.visualstudio.com/docs/extensions/publish-extension
- *
  * FYI Use the console to output diagnostic information (console.log) and errors (console.error)
  *
  * TODO:
@@ -27,7 +24,7 @@ import { createElementName } from './utils'
 
 export function activate(context) {
   try {
-    console.log(`${CONSTANTS.name} is activating...`) // eslint-disable-line
+    console.log(`${CONSTANTS.name} is activating...`)
 
     // set up available commands and the statusbar
     const togglClient = new Toggl(context)
@@ -38,16 +35,16 @@ export function activate(context) {
     commands.initCommands()
     statusBar.initStatusbar()
 
-    // start polling
+    // start polling once the extension is activated
     const commandId = createElementName('startPolling')
     commandsHandler.executeCommand(commandId) // promise
 
     // log successfull start
-    console.log(`${CONSTANTS.name} is activated now...`) // eslint-disable-line
+    console.log(`${CONSTANTS.name} is activated now!`)
   } catch (error) {
-    // TODO: handle all catched errors during activation _and_ execution here!
-    console.error(error)
+    // TODO: handle all catched errors during activation _and_ execution here
     window.showErrorMessage(error.text)
+    console.error(error)
   }
 }
 

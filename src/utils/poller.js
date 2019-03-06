@@ -3,7 +3,7 @@
  * - https://medium.com/@xaviergeerinck/creating-a-non-blocking-polling-system-in-node-js-with-settimeout-and-eventemitter-4aaa098d25fb
  * - https://github.com/cGuille/async-polling
  */
-const EventEmitter = require('events')
+import EventEmitter from 'events'
 
 class Poller extends EventEmitter {
   constructor(timeout) {
