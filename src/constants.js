@@ -1,5 +1,5 @@
 const CONSTANTS = {
-  name: 'Toggl',
+  name: 'Toggl for VS Code',
   prefix: 'toggl', // keep in sync with package.json
 }
 

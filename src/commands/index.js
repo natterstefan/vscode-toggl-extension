@@ -56,7 +56,7 @@ class Commands {
       window.showInformationMessage(`Started tracking "${description}"`)
     } catch (error) {
       // TODO: handle error properly
-      this.doReportMessage()
+      this.doReportMessage(error.message)
       console.error(error)
     }
   }
@@ -70,7 +70,7 @@ class Commands {
       window.showInformationMessage(`Stopped tracking.`)
     } catch (error) {
       // TODO: handle error properly
-      this.doReportMessage()
+      this.doReportMessage(error.message)
       console.error(error)
     }
   }
@@ -85,7 +85,7 @@ class Commands {
         this.doStart(result)
       } catch (error) {
         // TODO: handle error properly
-        this.doReportMessage()
+        this.doReportMessage(error.message)
         console.error(error)
       }
     }
@@ -107,7 +107,7 @@ class Commands {
           })
       } catch (error) {
         // TODO: handle error properly
-        this.doReportMessage()
+        this.doReportMessage(error.message)
         console.error(error)
       }
     }
@@ -131,11 +131,11 @@ class Commands {
     const commandHandler = () => {
       // TODO: make sure someone can stop & restart polling
       // start fetching current time entry and display it in statusbar
-      this.togglClient.pollCurrentTimeEntry((err, data) => {
-        if (err) {
+      this.togglClient.pollCurrentTimeEntry((error, data) => {
+        if (error) {
           // ATTENTION: currently we do not restart fetching!
-          this.doReportMessage()
-          console.error(err)
+          this.doReportMessage(error.message)
+          console.error(error)
           return
         }
 

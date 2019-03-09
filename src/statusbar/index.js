@@ -7,6 +7,7 @@
  */
 import { StatusBarAlignment, window } from 'vscode' // eslint-disable-line
 import { createElementName } from '../utils'
+import CONSTANTS from '../constants'
 
 class StatusBar {
   constructor(context) {
@@ -23,6 +24,7 @@ class StatusBar {
     // create the StatusBar with command onClick
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
     this.status.command = createElementName('openToggl')
+    this.status.tooltip = `${CONSTANTS.name}: Click to open toggl.com!`
     this.context.subscriptions.push(this.status)
 
     // reset bar (show initial state)
@@ -30,18 +32,13 @@ class StatusBar {
   }
 
   updateStatus(text) {
-    this.text = text || ''
-
-    if (this.text) {
-      this.status.text = `$(watch) ${this.text}` // only statusbar is capable of displaying emojis
-      this.status.show()
-    } else {
-      this.status.hide()
-    }
+    this.text = text || '-'
+    this.status.text = ['$(watch) Toggl:', this.text].filter(i => !!i).join(' ') // only statusbar is capable of displaying emojis
+    this.status.show()
   }
 
   resetBar() {
-    this.updateStatus('You are not tracking your time right now.')
+    this.updateStatus()
   }
 
   showCurrentTimeFromTogglItem(togglItem) {
@@ -50,11 +47,7 @@ class StatusBar {
       return
     }
 
-    this.updateStatus(
-      `Currently tracking "${togglItem.description}" (${
-        togglItem.durationText
-      })`,
-    )
+    this.updateStatus(`${togglItem.description} (${togglItem.durationText})`)
   }
 }
 

@@ -119,6 +119,7 @@ export class TogglApiClient {
           return
         }
 
+        // NOTE: one could also fetch the project name here now
         resolve(this.buildHumanizedTogglItem(togglItem))
       })
     })
