@@ -39,8 +39,7 @@ class Commands {
 
   doStart = async description => {
     if (!description) {
-      this.doReportMessage('Entry is not valid. Please try it again')
-      return
+      throw new Error('Entry is not valid. Please try it again.')
     }
 
     try {
@@ -48,30 +47,19 @@ class Commands {
       const togglItem = this.togglClient.buildTogglItem(description)
       const result = await this.togglClient.startTimeEntry(togglItem)
 
-      // finally display result in statusbar
+      // make it human readable and resolve it
       const humanTogglItrem = this.togglClient.buildHumanizedTogglItem(result)
-      this.statusBar.showCurrentTimeFromTogglItem(humanTogglItrem)
-
-      // tell the user everything worked
-      window.showInformationMessage(`Started tracking "${description}"`)
+      return humanTogglItrem
     } catch (error) {
-      // TODO: handle error properly
-      this.doReportMessage(error.message)
-      console.error(error)
+      throw new Error(error.message)
     }
   }
 
   doStop = async () => {
     try {
       await this.togglClient.stopTimeEntry()
-      this.statusBar.resetBar()
-
-      // tell the user everything worked
-      window.showInformationMessage(`Stopped tracking.`)
     } catch (error) {
-      // TODO: handle error properly
-      this.doReportMessage(error.message)
-      console.error(error)
+      throw new Error(error.message)
     }
   }
 
@@ -79,10 +67,15 @@ class Commands {
     const commandId = createElementName('startEntry')
     const commandHandler = async () => {
       try {
-        const result = await window.showInputBox({
+        const value = await window.showInputBox({
           prompt: 'Enter the name of the entry',
         })
-        this.doStart(result)
+
+        const humanTogglItem = await this.doStart(value)
+
+        // tell the user everything worked
+        this.statusBar.showCurrentTimeFromTogglItem(humanTogglItem)
+        window.showInformationMessage(`Started tracking "${value}"`)
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
@@ -100,11 +93,16 @@ class Commands {
     const commandHandler = async () => {
       try {
         const entries = await this.togglClient.getAllEntries()
-        window
-          .showQuickPick(entries.map(i => i.description), {})
-          .then(value => {
-            this.doStart(value)
-          })
+        const value = await window.showQuickPick(
+          entries.map(i => i.description),
+          {},
+        )
+
+        const humanTogglItem = await this.doStart(value)
+
+        // tell the user everything worked
+        this.statusBar.showCurrentTimeFromTogglItem(humanTogglItem)
+        window.showInformationMessage(`Started tracking "${value}"`)
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
@@ -117,9 +115,21 @@ class Commands {
     this.context.subscriptions.push(command)
   }
 
-  commandStopEntry = () => {
+  commandStopEntry = async () => {
     const commandId = createElementName('stopEntry')
-    const commandHandler = this.doStop
+    const commandHandler = async () => {
+      try {
+        await this.doStop()
+
+        // reset bar and tell the user everything worked
+        this.statusBar.resetBar()
+        window.showInformationMessage(`Stopped tracking.`)
+      } catch (error) {
+        // TODO: handle error properly
+        this.doReportMessage(error.message)
+        console.error(error)
+      }
+    }
 
     // activate the command
     const command = commands.registerCommand(commandId, commandHandler)

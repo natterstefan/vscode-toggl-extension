@@ -6,6 +6,11 @@ adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- added `executeCommand('toggl.startEntry')` test
+- `nock` for extended tests
+
 ### Changed
 
 - reduce statusbar width by changing the output text when tracking and when not

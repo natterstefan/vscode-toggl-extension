@@ -41,4 +41,12 @@ describe('Extension', () => {
     activate(context)
     expect(context.subscriptions.length).toBeGreaterThan(0)
   })
+
+  it('startEntry can be executed', async () => {
+    // docs: https://github.com/codecov/example-typescript-vscode-extension/blob/a1d4164097d0550db3c87b78cff389a5a19ba857/test/extension.test.ts#L17-L19
+    await global.vscode.commands.executeCommand('toggl.startEntry')
+
+    // can only be reached when commands was executed
+    expect(true).toBeTruthy()
+  })
 })
