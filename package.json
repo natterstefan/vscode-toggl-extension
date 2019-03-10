@@ -7,9 +7,7 @@
   "license": "Apache-2.0",
   "version": "0.1.0",
   "main": "./dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "clean": "rimraf dist && rimraf dist-test",
     "build": "npm run clean && babel ./src --ignore **/*.test.js --out-dir dist && babel test --out-dir dist-test",
@@ -17,14 +15,13 @@
     "lint": "eslint ./src",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "pretest": "npm run build",
-    "test": "cross-env CODE_TESTS_WORKSPACE=test-project CODE_TESTS_PATH=${INIT_CWD}/dist-test node ./node_modules/vscode/bin/test"
+    "test": "cross-env CODE_TESTS_WORKSPACE=test-project CODE_TESTS_PATH=${INIT_CWD}/dist-test node ./node_modules/vscode/bin/test",
+    "vscode:prepublish": "npm run build"
   },
   "engines": {
     "vscode": "^1.27.1"
   },
-  "categories": [
-    "Other"
-  ],
+  "categories": ["Other"],
   "activationEvents": [
     "*",
     "onCommand:toggl.startEntry",
@@ -80,11 +77,7 @@
     }
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "npm run lint-fix",
-      "git update-index --again"
-    ]
+    "*.js": ["prettier --write", "npm run lint-fix", "git update-index --again"]
   },
   "repository": {
     "type": "git",
