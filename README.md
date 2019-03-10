@@ -1,5 +1,7 @@
 # Toggl Extension for VSCode
 
+[![Build Status](https://travis-ci.org/natterstefan/vscode-toggl-extension.svg?branch=master)](https://travis-ci.org/natterstefan/vscode-toggl-extension) [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/natterstefan.vs-code-toggl-extension.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension) [![Installs](https://vsmarketplacebadge.apphb.com/installs/natterstefan.vs-code-toggl-extension.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension)
+
 Track your working hours in Toggl directly in your VS Code. :watch:
 
 ## Features and Commands
