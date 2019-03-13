@@ -9,6 +9,7 @@
 import nock from 'nock'
 
 global.mockEventListener = jest.fn()
+global.mockInfoListener = jest.fn()
 
 jest.mock(
   'vscode',
@@ -32,7 +33,12 @@ jest.mock(
       window: {
         ...global.vscode.window,
         // returning a static value works as long as only startEntry uses showInputbox
-        showInputBox: jest.fn().mockReturnValue('test entry'),
+        showInputBox: jest.fn().mockResolvedValue('test entry'),
+        showQuickPick: jest.fn().mockResolvedValue('existing test entry'),
+        showInformationMessage: jest.fn(m => {
+          global.mockInfoListener(m)
+          global.vscode.window.showInformationMessage(m)
+        }),
       },
     }
   },
@@ -54,8 +60,13 @@ jest.mock(
  */
 nock('https://www.toggl.com')
   .persist() // between tests
-  .get(() => true)
+  .get('/api/v8/time_entries/current')
   .reply(200, {})
+
+nock('https://www.toggl.com')
+  .persist() // between tests
+  .get('/api/v8/time_entries')
+  .reply(200, [])
 
 nock('https://www.toggl.com')
   .persist() // between tests

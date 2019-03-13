@@ -33,6 +33,11 @@
 import { activate } from './extension'
 
 describe('Extension', () => {
+  beforeEach(() => {
+    global.mockEventListener.mockReset()
+    global.mockInfoListener.mockReset()
+  })
+
   it('can be activated', () => {
     const context = {
       subscriptions: [],
@@ -60,7 +65,15 @@ describe('Extension', () => {
   it('openToggl can be executed', async () => {
     await global.vscode.commands.executeCommand('toggl.openToggl')
 
-    expect(global.mockEventListener).toHaveBeenCalledTimes(2) // 1 in test and 1 in exentions
+    expect(global.mockEventListener).toHaveBeenCalledTimes(1)
     expect(global.mockEventListener).toHaveBeenLastCalledWith('vscode.open')
+  })
+  it('startExistingEntry can be executed', async () => {
+    await global.vscode.commands.executeCommand('toggl.startExistingEntry')
+
+    expect(global.mockInfoListener).toHaveBeenCalledTimes(1)
+    expect(global.mockInfoListener).toHaveBeenLastCalledWith(
+      'Started tracking "existing test entry"',
+    )
   })
 })
