@@ -49,4 +49,11 @@ describe('Extension', () => {
     // can only be reached when commands was executed
     expect(true).toBeTruthy()
   })
+
+  it('stopEntry can be executed', async () => {
+    await global.vscode.commands.executeCommand('toggl.stopEntry')
+
+    // can only be reached when commands was executed
+    expect(true).toBeTruthy()
+  })
 })
