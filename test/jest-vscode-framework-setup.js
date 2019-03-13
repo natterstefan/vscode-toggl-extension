@@ -8,11 +8,27 @@
  */
 import nock from 'nock'
 
+global.mockEventListener = jest.fn()
+
 jest.mock(
   'vscode',
   () => {
     return {
       ...global.vscode,
+      commands: {
+        ...global.vscode.commands,
+        executeCommand: jest.fn((c, ...other) => {
+          // make info about executed command name available in tests
+          global.mockEventListener(c)
+
+          // mock, or it will open browser
+          if (c === 'vscode.open') {
+            return true
+          }
+
+          return global.vscode.commands.executeCommand(c, ...other)
+        }),
+      },
       window: {
         ...global.vscode.window,
         // returning a static value works as long as only startEntry uses showInputbox
@@ -37,9 +53,11 @@ jest.mock(
  * docs: https://www.npmjs.com/package/nock
  */
 nock('https://www.toggl.com')
+  .persist() // between tests
   .get(() => true)
   .reply(200, {})
 
 nock('https://www.toggl.com')
+  .persist() // between tests
   .post(() => true)
   .reply(200, {})

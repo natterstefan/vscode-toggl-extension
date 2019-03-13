@@ -56,4 +56,11 @@ describe('Extension', () => {
     // can only be reached when commands was executed
     expect(true).toBeTruthy()
   })
+
+  it('openToggl can be executed', async () => {
+    await global.vscode.commands.executeCommand('toggl.openToggl')
+
+    expect(global.mockEventListener).toHaveBeenCalledTimes(2) // 1 in test and 1 in exentions
+    expect(global.mockEventListener).toHaveBeenLastCalledWith('vscode.open')
+  })
 })
