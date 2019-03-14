@@ -12,6 +12,7 @@ Track your working hours in Toggl directly in your VS Code. :watch:
 - `toggl.startExistingEntry` starts an existing entry on toggl
 - `toggl.stopEntry`: stops the current entry
 - `toggl.openToggl`: opens [toggl.com](https://toggl.com/app/timer) in the browser
+- `toggl.fetchToggl`: fetch current toggl entry from [toggl.com](https://toggl.com/app/timer)
 
 ## Features
 

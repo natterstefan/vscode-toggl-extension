@@ -53,7 +53,7 @@
       {
         "category": "Toggl",
         "command": "toggl.fetchToggl",
-        "title": "Fetch current Task from Toggl"
+        "title": "Fetch current Entry from Toggl"
       }
     ],
     "configuration": {

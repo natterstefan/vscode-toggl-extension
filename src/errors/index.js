@@ -9,7 +9,7 @@
  */
 import createCustomError from 'custom-error-generator'
 
-import CONSTANT from '../constants'
+import { CONSTANTS } from '../constants'
 
 export const SettingsError = createCustomError(
   'SettingsError',
@@ -28,7 +28,7 @@ export const SettingsError = createCustomError(
     }
 
     this.text = `${
-      CONSTANT.name
+      CONSTANTS.name
     } - SettingsError: Please configure ${settingName}, before using the extension. Once you have changed it, reload the workspace and window.`
   },
 )
