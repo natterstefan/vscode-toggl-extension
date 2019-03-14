@@ -29,11 +29,11 @@ export function activate(context) {
     // set up available commands and the statusbar
     const togglClient = new Toggl(context)
     const statusBar = new StatusBar(context)
-    const commands = new Commands(context, togglClient, statusBar)
+    const commands = new Commands(context, togglClient)
 
     // init all features
-    commands.initCommands()
-    statusBar.initStatusbar()
+    statusBar.init()
+    commands.init()
 
     // start polling once the extension is activated
     const commandId = createElementName('startPolling')

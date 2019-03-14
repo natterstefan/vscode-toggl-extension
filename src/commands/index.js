@@ -12,13 +12,15 @@ import { createElementName } from '../utils'
  * internally
  */
 class Commands {
-  constructor(context, togglClient, statusBar) {
+  constructor(context, togglClient) {
     this.context = context
     this.togglClient = togglClient
-    this.statusBar = statusBar // instance of ../statusbar/index.js
+
+    // other event handler id(s)
+    this.statusBarUpdateEvent = createElementName('udpateStatusbar')
   }
 
-  initCommands() {
+  init() {
     // The command has been defined in the package.json file
     // The commandId parameter must match the command field in package.json
     // only commands added to package.json are exposed in the command palette
@@ -63,12 +65,13 @@ class Commands {
         const value = await window.showInputBox({
           prompt: 'Enter the name of the entry',
         })
-
         const humanTogglItem = await this.doStart(value)
 
         // tell the user everything worked
-        this.statusBar.showCurrentTimeFromTogglItem(humanTogglItem)
         window.showInformationMessage(`Started tracking "${value}"`)
+
+        // and update the statusbar
+        commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
@@ -94,8 +97,10 @@ class Commands {
         const humanTogglItem = await this.doStart(value)
 
         // tell the user everything worked
-        this.statusBar.showCurrentTimeFromTogglItem(humanTogglItem)
         window.showInformationMessage(`Started tracking "${value}"`)
+
+        // and update the statusbar
+        commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
@@ -115,7 +120,7 @@ class Commands {
         await this.togglClient.stopTimeEntry()
 
         // reset bar and tell the user everything worked
-        this.statusBar.resetBar()
+        commands.executeCommand(this.statusBarUpdateEvent)
         window.showInformationMessage(`Stopped tracking.`)
       } catch (error) {
         // TODO: handle error properly
@@ -134,7 +139,7 @@ class Commands {
     const commandHandler = () => {
       // TODO: make sure someone can stop & restart polling
       // start fetching current time entry and display it in statusbar
-      this.togglClient.pollCurrentTimeEntry((error, data) => {
+      this.togglClient.pollCurrentTimeEntry((error, togglItem) => {
         if (error) {
           // ATTENTION: currently we do not restart fetching!
           this.doReportMessage(error.message)
@@ -142,7 +147,8 @@ class Commands {
           return
         }
 
-        this.statusBar.showCurrentTimeFromTogglItem(data)
+        // update the statusbar
+        commands.executeCommand(this.statusBarUpdateEvent, togglItem)
       })
     }
 
@@ -169,8 +175,8 @@ class Commands {
     const commandId = createElementName('fetchToggl')
     const commandHandler = async () => {
       try {
-        const data = await this.togglClient.stopTimeEntry()
-        this.statusBar.showCurrentTimeFromTogglItem(data)
+        const data = await this.togglClient.getCurrentTimeEntry()
+        commands.executeCommand(this.statusBarUpdateEvent, data)
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)

@@ -5,7 +5,7 @@
  * Docs
  * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
  */
-import { StatusBarAlignment, window } from 'vscode' // eslint-disable-line
+import { commands, StatusBarAlignment, window } from 'vscode' // eslint-disable-line
 import { createElementName } from '../utils'
 import CONSTANTS from '../constants'
 
@@ -15,20 +15,26 @@ class StatusBar {
     this.text = ''
 
     // bindings
-    this.showCurrentTimeFromTogglItem = this.showCurrentTimeFromTogglItem.bind(
-      this,
-    )
+    this.showTogglItemInfo = this.showTogglItemInfo.bind(this)
   }
 
-  initStatusbar() {
+  init() {
+    // register internal command
+    const commandId = createElementName('udpateStatusbar')
+    const commandHandler = this.showTogglItemInfo
+
+    // activate the command
+    const command = commands.registerCommand(commandId, commandHandler)
+    this.context.subscriptions.push(command)
+
     // create the StatusBar with command onClick
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
     this.status.command = createElementName('openToggl')
     this.status.tooltip = `${CONSTANTS.name}: Click to open toggl.com!`
     this.context.subscriptions.push(this.status)
 
-    // reset bar (show initial state)
-    this.resetBar()
+    // initialise empty bar
+    this.updateStatus()
   }
 
   updateStatus(text) {
@@ -37,13 +43,9 @@ class StatusBar {
     this.status.show()
   }
 
-  resetBar() {
-    this.updateStatus()
-  }
-
-  showCurrentTimeFromTogglItem(togglItem) {
+  showTogglItemInfo(togglItem) {
     if (!togglItem) {
-      this.resetBar()
+      this.updateStatus()
       return
     }
 
