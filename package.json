@@ -49,6 +49,11 @@
         "category": "Toggl",
         "command": "toggl.openToggl",
         "title": "Open Toggl Timer (Browser)"
+      },
+      {
+        "category": "Toggl",
+        "command": "toggl.fetchToggl",
+        "title": "Fetch current Task from Toggl"
       }
     ],
     "configuration": {

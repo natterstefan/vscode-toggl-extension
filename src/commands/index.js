@@ -28,6 +28,7 @@ class Commands {
       this.commandStopEntry,
       this.commandPollExistingEntry,
       this.commandOpenToggl,
+      this.commandUpdateToggl,
     ]
     allCommands.forEach(i => i())
   }
@@ -50,14 +51,6 @@ class Commands {
       // make it human readable and resolve it
       const humanTogglItrem = this.togglClient.buildHumanizedTogglItem(result)
       return humanTogglItrem
-    } catch (error) {
-      throw new Error(error.message)
-    }
-  }
-
-  doStop = async () => {
-    try {
-      await this.togglClient.stopTimeEntry()
     } catch (error) {
       throw new Error(error.message)
     }
@@ -119,7 +112,7 @@ class Commands {
     const commandId = createElementName('stopEntry')
     const commandHandler = async () => {
       try {
-        await this.doStop()
+        await this.togglClient.stopTimeEntry()
 
         // reset bar and tell the user everything worked
         this.statusBar.resetBar()
@@ -165,6 +158,24 @@ class Commands {
         'vscode.open',
         Uri.parse('https://toggl.com/app/timer'),
       )
+    }
+
+    // activate the command
+    const command = commands.registerCommand(commandId, commandHandler)
+    this.context.subscriptions.push(command)
+  }
+
+  commandUpdateToggl = () => {
+    const commandId = createElementName('fetchToggl')
+    const commandHandler = async () => {
+      try {
+        const data = await this.togglClient.stopTimeEntry()
+        this.statusBar.showCurrentTimeFromTogglItem(data)
+      } catch (error) {
+        // TODO: handle error properly
+        this.doReportMessage(error.message)
+        console.error(error)
+      }
     }
 
     // activate the command

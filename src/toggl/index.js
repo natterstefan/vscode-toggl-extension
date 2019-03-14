@@ -154,7 +154,7 @@ export class TogglApiClient {
     const togglItem = await this.getCurrentTimeEntry()
     return new Promise((resolve, reject) => {
       if (!togglItem) {
-        reject(new Error('No current Entry available'))
+        reject(new Error('No current Entry available.'))
         return
       }
 

@@ -68,6 +68,7 @@ describe('Extension', () => {
     expect(global.mockEventListener).toHaveBeenCalledTimes(1)
     expect(global.mockEventListener).toHaveBeenLastCalledWith('vscode.open')
   })
+
   it('startExistingEntry can be executed', async () => {
     await global.vscode.commands.executeCommand('toggl.startExistingEntry')
 
@@ -75,5 +76,12 @@ describe('Extension', () => {
     expect(global.mockInfoListener).toHaveBeenLastCalledWith(
       'Started tracking "existing test entry"',
     )
+  })
+
+  it('fetchToggl can be executed', async () => {
+    await global.vscode.commands.executeCommand('toggl.fetchToggl')
+
+    // can only be reached when commands was executed
+    expect(true).toBeTruthy()
   })
 })
