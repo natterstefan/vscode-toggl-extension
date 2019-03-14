@@ -51,15 +51,19 @@ describe('Extension', () => {
     // docs: https://github.com/codecov/example-typescript-vscode-extension/blob/a1d4164097d0550db3c87b78cff389a5a19ba857/test/extension.test.ts#L17-L19
     await global.vscode.commands.executeCommand('toggl.startEntry')
 
-    // can only be reached when commands was executed
-    expect(true).toBeTruthy()
+    expect(global.mockInfoListener).toHaveBeenCalledTimes(1)
+    expect(global.mockInfoListener).toHaveBeenLastCalledWith(
+      'Started tracking "test entry"',
+    )
   })
 
   it('stopEntry can be executed', async () => {
     await global.vscode.commands.executeCommand('toggl.stopEntry')
 
-    // can only be reached when commands was executed
-    expect(true).toBeTruthy()
+    expect(global.mockInfoListener).toHaveBeenCalledTimes(1)
+    expect(global.mockInfoListener).toHaveBeenLastCalledWith(
+      'Stopped tracking.',
+    )
   })
 
   it('openToggl can be executed', async () => {
