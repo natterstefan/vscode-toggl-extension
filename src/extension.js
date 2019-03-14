@@ -16,11 +16,10 @@
  */
 import { commands as commandsHandler, window } from 'vscode' // eslint-disable-line
 
-import CONSTANTS from './constants'
+import { CONSTANTS, EVENTS } from './constants'
 import Toggl from './toggl'
 import StatusBar from './statusbar'
 import Commands from './commands'
-import { createElementName } from './utils'
 
 export function activate(context) {
   try {
@@ -36,7 +35,7 @@ export function activate(context) {
     commands.init()
 
     // start polling once the extension is activated
-    const commandId = createElementName('startPolling')
+    const commandId = EVENTS.startPolling
     commandsHandler.executeCommand(commandId) // promise
 
     // log successfull start

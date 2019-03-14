@@ -6,8 +6,7 @@
  * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
  */
 import { commands, StatusBarAlignment, window } from 'vscode' // eslint-disable-line
-import { createElementName } from '../utils'
-import CONSTANTS from '../constants'
+import { CONSTANTS, EVENTS } from '../constants'
 
 class StatusBar {
   constructor(context) {
@@ -20,7 +19,7 @@ class StatusBar {
 
   init() {
     // register internal command
-    const commandId = createElementName('udpateStatusbar')
+    const commandId = EVENTS.updateStatusBar
     const commandHandler = this.showTogglItemInfo
 
     // activate the command
@@ -29,7 +28,7 @@ class StatusBar {
 
     // create the StatusBar with command onClick
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
-    this.status.command = createElementName('openToggl')
+    this.status.command = EVENTS.openToggl
     this.status.tooltip = `${CONSTANTS.name}: Click to open toggl.com!`
     this.context.subscriptions.push(this.status)
 

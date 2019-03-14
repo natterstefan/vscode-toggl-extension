@@ -3,7 +3,7 @@
  * - https://code.visualstudio.com/api/extension-guides/command#creating-new-commands
  */
 import { commands, window, Uri } from 'vscode' // eslint-disable-line
-import { createElementName } from '../utils'
+import { EVENTS } from '../constants'
 
 /**
  * Commands: takes care of implementing and activating VS Code commands
@@ -17,7 +17,7 @@ class Commands {
     this.togglClient = togglClient
 
     // other event handler id(s)
-    this.statusBarUpdateEvent = createElementName('udpateStatusbar')
+    this.statusBarUpdateEvent = EVENTS.updateStatusBar
   }
 
   init() {
@@ -59,7 +59,7 @@ class Commands {
   }
 
   commandStartEntry = () => {
-    const commandId = createElementName('startEntry')
+    const commandId = EVENTS.startEntry
     const commandHandler = async () => {
       try {
         const value = await window.showInputBox({
@@ -85,7 +85,7 @@ class Commands {
   }
 
   commandStartExistingEntry = () => {
-    const commandId = createElementName('startExistingEntry')
+    const commandId = EVENTS.startExistingEntry
     const commandHandler = async () => {
       try {
         const entries = await this.togglClient.getAllEntries()
@@ -114,7 +114,7 @@ class Commands {
   }
 
   commandStopEntry = async () => {
-    const commandId = createElementName('stopEntry')
+    const commandId = EVENTS.stopEntry
     const commandHandler = async () => {
       try {
         await this.togglClient.stopTimeEntry()
@@ -135,7 +135,7 @@ class Commands {
   }
 
   commandPollExistingEntry = () => {
-    const commandId = createElementName('startPolling')
+    const commandId = EVENTS.startPolling
     const commandHandler = () => {
       // TODO: make sure someone can stop & restart polling
       // start fetching current time entry and display it in statusbar
@@ -158,7 +158,7 @@ class Commands {
   }
 
   commandOpenToggl = () => {
-    const commandId = createElementName('openToggl')
+    const commandId = EVENTS.openToggl
     const commandHandler = () => {
       commands.executeCommand(
         'vscode.open',
@@ -172,7 +172,7 @@ class Commands {
   }
 
   commandUpdateToggl = () => {
-    const commandId = createElementName('fetchToggl')
+    const commandId = EVENTS.fetchToggl
     const commandHandler = async () => {
       try {
         const data = await this.togglClient.getCurrentTimeEntry()
