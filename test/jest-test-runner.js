@@ -15,7 +15,7 @@ const jestConfig = {
   colors: true,
   moduleFileExtensions: ['js'],
   rootDir,
-  roots: ['<rootDir>/src'],
+  roots: ['<rootDir>/dist'],
   runInBand: true, // Required due to the way the "vscode" module is injected.
   setupTestFrameworkScriptFile: fromRoot(
     'dist-test/jest-vscode-framework-setup.js',

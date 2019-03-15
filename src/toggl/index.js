@@ -90,14 +90,18 @@ export class TogglApiClient {
         }
 
         // prepare all togglItems and return only unique ones (https://stackoverflow.com/a/14438954/1238150)
-        const entries = togglItems
-          .map(this.buildHumanizedTogglItem)
-          .filter(item => !!(item && item.description))
-          .filter(
-            (value, index, self) =>
-              self.findIndex(elem => elem.description === value.description) ===
-              index,
-          )
+        const entries =
+          (togglItems &&
+            togglItems
+              .map(this.buildHumanizedTogglItem)
+              .filter(item => !!(item && item.description))
+              .filter(
+                (value, index, self) =>
+                  self.findIndex(
+                    elem => elem.description === value.description,
+                  ) === index,
+              )) ||
+          []
 
         resolve(entries)
       })
@@ -150,7 +154,7 @@ export class TogglApiClient {
     const togglItem = await this.getCurrentTimeEntry()
     return new Promise((resolve, reject) => {
       if (!togglItem) {
-        reject(new Error('No current Entry available'))
+        reject(new Error('No current Entry available.'))
         return
       }
 

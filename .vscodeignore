@@ -6,6 +6,7 @@
 docs/**
 
 # testing
+src/**/*.test.js
 dist-test/**
 test/**
 

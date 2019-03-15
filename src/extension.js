@@ -16,11 +16,10 @@
  */
 import { commands as commandsHandler, window } from 'vscode' // eslint-disable-line
 
-import CONSTANTS from './constants'
+import { CONSTANTS, EVENTS } from './constants'
 import Toggl from './toggl'
 import StatusBar from './statusbar'
 import Commands from './commands'
-import { createElementName } from './utils'
 
 export function activate(context) {
   try {
@@ -29,14 +28,14 @@ export function activate(context) {
     // set up available commands and the statusbar
     const togglClient = new Toggl(context)
     const statusBar = new StatusBar(context)
-    const commands = new Commands(context, togglClient, statusBar)
+    const commands = new Commands(context, togglClient)
 
     // init all features
-    commands.initCommands()
-    statusBar.initStatusbar()
+    statusBar.init()
+    commands.init()
 
     // start polling once the extension is activated
-    const commandId = createElementName('startPolling')
+    const commandId = EVENTS.startPolling
     commandsHandler.executeCommand(commandId) // promise
 
     // log successfull start

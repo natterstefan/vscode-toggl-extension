@@ -3,7 +3,7 @@
  * - https://code.visualstudio.com/api/extension-guides/command#creating-new-commands
  */
 import { commands, window, Uri } from 'vscode' // eslint-disable-line
-import { createElementName } from '../utils'
+import { EVENTS } from '../constants'
 
 /**
  * Commands: takes care of implementing and activating VS Code commands
@@ -12,13 +12,15 @@ import { createElementName } from '../utils'
  * internally
  */
 class Commands {
-  constructor(context, togglClient, statusBar) {
+  constructor(context, togglClient) {
     this.context = context
     this.togglClient = togglClient
-    this.statusBar = statusBar // instance of ../statusbar/index.js
+
+    // other event handler id(s)
+    this.statusBarUpdateEvent = EVENTS.updateStatusBar
   }
 
-  initCommands() {
+  init() {
     // The command has been defined in the package.json file
     // The commandId parameter must match the command field in package.json
     // only commands added to package.json are exposed in the command palette
@@ -28,6 +30,7 @@ class Commands {
       this.commandStopEntry,
       this.commandPollExistingEntry,
       this.commandOpenToggl,
+      this.commandUpdateToggl,
     ]
     allCommands.forEach(i => i())
   }
@@ -39,8 +42,7 @@ class Commands {
 
   doStart = async description => {
     if (!description) {
-      this.doReportMessage('Entry is not valid. Please try it again')
-      return
+      throw new Error('Entry is not valid. Please try it again.')
     }
 
     try {
@@ -48,41 +50,28 @@ class Commands {
       const togglItem = this.togglClient.buildTogglItem(description)
       const result = await this.togglClient.startTimeEntry(togglItem)
 
-      // finally display result in statusbar
+      // make it human readable and resolve it
       const humanTogglItrem = this.togglClient.buildHumanizedTogglItem(result)
-      this.statusBar.showCurrentTimeFromTogglItem(humanTogglItrem)
-
-      // tell the user everything worked
-      window.showInformationMessage(`Started tracking "${description}"`)
+      return humanTogglItrem
     } catch (error) {
-      // TODO: handle error properly
-      this.doReportMessage(error.message)
-      console.error(error)
-    }
-  }
-
-  doStop = async () => {
-    try {
-      await this.togglClient.stopTimeEntry()
-      this.statusBar.resetBar()
-
-      // tell the user everything worked
-      window.showInformationMessage(`Stopped tracking.`)
-    } catch (error) {
-      // TODO: handle error properly
-      this.doReportMessage(error.message)
-      console.error(error)
+      throw new Error(error.message)
     }
   }
 
   commandStartEntry = () => {
-    const commandId = createElementName('startEntry')
+    const commandId = EVENTS.startEntry
     const commandHandler = async () => {
       try {
-        const result = await window.showInputBox({
+        const value = await window.showInputBox({
           prompt: 'Enter the name of the entry',
         })
-        this.doStart(result)
+        const humanTogglItem = await this.doStart(value)
+
+        // tell the user everything worked
+        window.showInformationMessage(`Started tracking "${value}"`)
+
+        // and update the statusbar
+        commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
@@ -96,15 +85,22 @@ class Commands {
   }
 
   commandStartExistingEntry = () => {
-    const commandId = createElementName('startExistingEntry')
+    const commandId = EVENTS.startExistingEntry
     const commandHandler = async () => {
       try {
         const entries = await this.togglClient.getAllEntries()
-        window
-          .showQuickPick(entries.map(i => i.description), {})
-          .then(value => {
-            this.doStart(value)
-          })
+        const value = await window.showQuickPick(
+          entries.map(i => i.description),
+          {},
+        )
+
+        const humanTogglItem = await this.doStart(value)
+
+        // tell the user everything worked
+        window.showInformationMessage(`Started tracking "${value}"`)
+
+        // and update the statusbar
+        commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
@@ -117,9 +113,21 @@ class Commands {
     this.context.subscriptions.push(command)
   }
 
-  commandStopEntry = () => {
-    const commandId = createElementName('stopEntry')
-    const commandHandler = this.doStop
+  commandStopEntry = async () => {
+    const commandId = EVENTS.stopEntry
+    const commandHandler = async () => {
+      try {
+        await this.togglClient.stopTimeEntry()
+
+        // reset bar and tell the user everything worked
+        commands.executeCommand(this.statusBarUpdateEvent)
+        window.showInformationMessage(`Stopped tracking.`)
+      } catch (error) {
+        // TODO: handle error properly
+        this.doReportMessage(error.message)
+        console.error(error)
+      }
+    }
 
     // activate the command
     const command = commands.registerCommand(commandId, commandHandler)
@@ -127,11 +135,11 @@ class Commands {
   }
 
   commandPollExistingEntry = () => {
-    const commandId = createElementName('startPolling')
+    const commandId = EVENTS.startPolling
     const commandHandler = () => {
       // TODO: make sure someone can stop & restart polling
       // start fetching current time entry and display it in statusbar
-      this.togglClient.pollCurrentTimeEntry((error, data) => {
+      this.togglClient.pollCurrentTimeEntry((error, togglItem) => {
         if (error) {
           // ATTENTION: currently we do not restart fetching!
           this.doReportMessage(error.message)
@@ -139,7 +147,8 @@ class Commands {
           return
         }
 
-        this.statusBar.showCurrentTimeFromTogglItem(data)
+        // update the statusbar
+        commands.executeCommand(this.statusBarUpdateEvent, togglItem)
       })
     }
 
@@ -149,12 +158,30 @@ class Commands {
   }
 
   commandOpenToggl = () => {
-    const commandId = createElementName('openToggl')
+    const commandId = EVENTS.openToggl
     const commandHandler = () => {
       commands.executeCommand(
         'vscode.open',
         Uri.parse('https://toggl.com/app/timer'),
       )
+    }
+
+    // activate the command
+    const command = commands.registerCommand(commandId, commandHandler)
+    this.context.subscriptions.push(command)
+  }
+
+  commandUpdateToggl = () => {
+    const commandId = EVENTS.fetchToggl
+    const commandHandler = async () => {
+      try {
+        const data = await this.togglClient.getCurrentTimeEntry()
+        commands.executeCommand(this.statusBarUpdateEvent, data)
+      } catch (error) {
+        // TODO: handle error properly
+        this.doReportMessage(error.message)
+        console.error(error)
+      }
     }
 
     // activate the command
