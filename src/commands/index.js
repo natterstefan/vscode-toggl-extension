@@ -3,7 +3,8 @@
  * - https://code.visualstudio.com/api/extension-guides/command#creating-new-commands
  */
 import { commands, window, Uri } from 'vscode' // eslint-disable-line
-import { CONSTANTS, EVENTS } from '../constants'
+import { EVENTS } from '../constants'
+import { logger } from '../utils'
 
 /**
  * Commands: takes care of implementing and activating VS Code commands
@@ -33,13 +34,6 @@ class Commands {
       this.commandUpdateToggl,
     ]
     allCommands.forEach(i => i())
-  }
-
-  doReportMessage(message) {
-    const msg =
-      `${CONSTANTS.name}: ${message}` ||
-      `${CONSTANTS.name}: An error occured. Please try again.`
-    window.showErrorMessage(msg)
   }
 
   doStart = async description => {
@@ -76,8 +70,7 @@ class Commands {
         commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
       } catch (error) {
         // TODO: handle error properly
-        this.doReportMessage(error.message)
-        console.error(CONSTANTS.name, error)
+        logger('error', error)
       }
     }
 
@@ -105,8 +98,7 @@ class Commands {
         commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
       } catch (error) {
         // TODO: handle error properly
-        this.doReportMessage(error.message)
-        console.error(CONSTANTS.name, error)
+        logger('error', error)
       }
     }
 
@@ -126,8 +118,7 @@ class Commands {
         window.showInformationMessage(`Stopped tracking.`)
       } catch (error) {
         // TODO: handle error properly
-        this.doReportMessage(error.message)
-        console.error(CONSTANTS.name, error)
+        logger('error', error)
       }
     }
 
@@ -144,10 +135,11 @@ class Commands {
       this.togglClient.pollCurrentTimeEntry((error, togglItem) => {
         if (error) {
           // ATTENTION: currently we do not restart fetching!
-          this.doReportMessage(
+          logger(
+            'error',
+            error,
             'Could not complete polling. Reload the window and try it again, please. If the error happens more often, try increasing the pollingTimeout.',
           )
-          console.error(CONSTANTS.name, error)
           return
         }
 
@@ -183,8 +175,7 @@ class Commands {
         commands.executeCommand(this.statusBarUpdateEvent, data)
       } catch (error) {
         // TODO: handle error properly
-        this.doReportMessage(error.message)
-        console.error(CONSTANTS.name, error)
+        logger('error', error)
       }
     }
 

@@ -16,14 +16,15 @@
  */
 import { commands as commandsHandler, window } from 'vscode' // eslint-disable-line
 
-import { CONSTANTS, EVENTS } from './constants'
+import { EVENTS } from './constants'
 import Toggl from './toggl'
 import StatusBar from './statusbar'
 import Commands from './commands'
+import { logger } from './utils'
 
 export function activate(context) {
   try {
-    console.log(`${CONSTANTS.name} is activating...`)
+    logger('log', 'is activating...')
 
     // set up available commands and the statusbar
     const togglClient = new Toggl(context)
@@ -39,11 +40,11 @@ export function activate(context) {
     commandsHandler.executeCommand(commandId) // promise
 
     // log successfull start
-    console.log(`${CONSTANTS.name} is activated now!`)
+    logger('log', 'is activated now!')
   } catch (error) {
     // TODO: handle all catched errors during activation _and_ execution here
     window.showErrorMessage(error.text)
-    console.error(error)
+    logger('error', error)
   }
 }
 

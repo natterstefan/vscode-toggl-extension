@@ -15,13 +15,8 @@ class Poller extends EventEmitter {
     }
   }
 
-  poll(startImmediatelly = false) {
+  poll() {
     setTimeout(() => this.emit('poll'), this.timeout)
-
-    // initially start
-    if (startImmediatelly) {
-      this.emit('poll')
-    }
   }
 
   onPoll(cb) {
