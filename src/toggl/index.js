@@ -24,6 +24,12 @@ export class TogglApiClient {
     context.subscriptions.push(
       workspace.onDidChangeConfiguration(() => this.prepareClient()),
     )
+
+    // setup polling feature
+    const timeout = getExtensionSetting('pollingTimeout') * 1000 || 3000
+    const safeTimeout = timeout < 3000 ? 3000 : timeout // min 3s to not reach the rate-limit
+    // note: this is previous request + processing time + timeout
+    this.poller = new Poller(safeTimeout)
   }
 
   // SETUP
@@ -177,14 +183,11 @@ export class TogglApiClient {
    * @param {function} cb
    */
   pollCurrentTimeEntry(cb) {
-    const timeout = getExtensionSetting('pollingTimeout') * 1000 || 3000
-    const safeTimeout = timeout < 3000 ? 3000 : timeout // min 3s to not reach the rate-limit
+    const maxRetries = 5
+    let retry = 0
 
-    // note: this is previous request + processing time + timeout
-    const poller = new Poller(safeTimeout)
-
-    // Wait till the timeout sent our event to the EventEmitter
-    poller.onPoll(async () => {
+    // the actual function that is invoked when a polling cycle starts
+    const pollingFn = async () => {
       try {
         // fetch data
         const result = await this.getCurrentTimeEntry()
@@ -192,15 +195,27 @@ export class TogglApiClient {
         // send result to callback
         cb(null, result)
 
-        // TODO: make sure invoker of the func can stop polling and restart it
-        poller.poll()
+        // trigger next polling cycle
+        this.poller.poll()
       } catch (error) {
+        // first retry x-times (see maxRetries) before failing
+        if (retry < maxRetries) {
+          retry++
+
+          // restart polling after an error
+          this.poller.poll()
+          return
+        }
+
         cb(error, null)
       }
-    })
+    }
+
+    // Wait till the timeout sent our event to the EventEmitter
+    this.poller.onPoll(pollingFn)
 
     // initial start
-    poller.poll(true)
+    this.poller.poll(true)
   }
 }
 

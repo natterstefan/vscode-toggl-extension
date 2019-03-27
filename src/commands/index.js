@@ -3,7 +3,7 @@
  * - https://code.visualstudio.com/api/extension-guides/command#creating-new-commands
  */
 import { commands, window, Uri } from 'vscode' // eslint-disable-line
-import { EVENTS } from '../constants'
+import { CONSTANTS, EVENTS } from '../constants'
 
 /**
  * Commands: takes care of implementing and activating VS Code commands
@@ -36,7 +36,9 @@ class Commands {
   }
 
   doReportMessage(message) {
-    const msg = message || 'An error occured. Please try again.'
+    const msg =
+      `${CONSTANTS.name}: ${message}` ||
+      `${CONSTANTS.name}: An error occured. Please try again.`
     window.showErrorMessage(msg)
   }
 
@@ -75,7 +77,7 @@ class Commands {
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
-        console.error(error)
+        console.error(CONSTANTS.name, error)
       }
     }
 
@@ -104,7 +106,7 @@ class Commands {
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
-        console.error(error)
+        console.error(CONSTANTS.name, error)
       }
     }
 
@@ -125,7 +127,7 @@ class Commands {
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
-        console.error(error)
+        console.error(CONSTANTS.name, error)
       }
     }
 
@@ -142,8 +144,10 @@ class Commands {
       this.togglClient.pollCurrentTimeEntry((error, togglItem) => {
         if (error) {
           // ATTENTION: currently we do not restart fetching!
-          this.doReportMessage(error.message)
-          console.error(error)
+          this.doReportMessage(
+            'Could not complete polling. Reload the window and try it again, please. If the error happens more often, try increasing the pollingTimeout.',
+          )
+          console.error(CONSTANTS.name, error)
           return
         }
 
@@ -180,7 +184,7 @@ class Commands {
       } catch (error) {
         // TODO: handle error properly
         this.doReportMessage(error.message)
-        console.error(error)
+        console.error(CONSTANTS.name, error)
       }
     }
 
