@@ -86,6 +86,7 @@
     "*.js": ["prettier --write", "npm run lint-fix", "git update-index --again"]
   },
   "repository": {
+    "type": "git",
     "url": "https://github.com/natterstefan/vscode-toggl-extension"
   },
   "bugs": {
