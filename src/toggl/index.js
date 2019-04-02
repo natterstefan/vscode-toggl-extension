@@ -203,7 +203,7 @@ export class TogglApiClient {
         logger('error', error)
 
         if (retriesLeft) {
-          logger('log', null, `retry polling. ${retriesLeft} tries left...`)
+          logger('log', `retry polling. ${retriesLeft} tries left...`)
 
           // wait and retry
           setTimeout(() => {
