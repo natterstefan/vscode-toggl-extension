@@ -14,6 +14,7 @@ import nock from 'nock'
 global.mockEventListener = jest.fn()
 global.mockInfoListener = jest.fn()
 global.mockGetConfigurationListener = jest.fn()
+global.mockErrorListener = jest.fn()
 
 jest.mock(
   'vscode',
@@ -59,6 +60,10 @@ jest.mock(
         showInformationMessage: jest.fn(m => {
           global.mockInfoListener(m)
           global.vscode.window.showInformationMessage(m)
+        }),
+        showErrorMessage: jest.fn(m => {
+          global.mockErrorListener(m)
+          global.vscode.window.showErrorMessage(m)
         }),
       },
     }

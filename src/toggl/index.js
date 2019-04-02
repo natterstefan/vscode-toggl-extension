@@ -3,7 +3,7 @@ import TogglClient from 'toggl-api'
 import moment from 'moment'
 
 import { SettingsError } from '../errors'
-import { getExtensionSetting, Poller } from '../utils'
+import { getExtensionSetting, logger, Poller } from '../utils'
 
 /**
  * TogglApiClient
@@ -24,6 +24,12 @@ export class TogglApiClient {
     context.subscriptions.push(
       workspace.onDidChangeConfiguration(() => this.prepareClient()),
     )
+
+    // setup polling feature
+    const timeout = getExtensionSetting('pollingTimeout') * 1000 || 3000
+    const safeTimeout = timeout < 3000 ? 3000 : timeout // min 3s to not reach the rate-limit
+    // note: this is previous request + processing time + timeout
+    this.poller = new Poller(safeTimeout)
   }
 
   // SETUP
@@ -172,35 +178,51 @@ export class TogglApiClient {
   // POLLING
   /**
    * pollCurrentTimeEntry: will poll every x-seconds (min. 3) and get the
-   * currently tracked entry from toggl.com
+   * currently tracked entry from toggl.com. It will also retry 5 times (with an
+   * exponential retry timeout of 2 * interval).
    *
    * @param {function} cb
+   *
+   * polling with retry logic inspired by (thanks):
+   * - https://gitlab.com/snippets/1775781
+   * - https://dev.to/ycmjason/javascript-fetch-retry-upon-failure-3p6g
+   * - https://gist.github.com/briancavalier/842626
    */
   pollCurrentTimeEntry(cb) {
-    const timeout = getExtensionSetting('pollingTimeout') * 1000 || 3000
-    const safeTimeout = timeout < 3000 ? 3000 : timeout // min 3s to not reach the rate-limit
-
-    // note: this is previous request + processing time + timeout
-    const poller = new Poller(safeTimeout)
-
-    // Wait till the timeout sent our event to the EventEmitter
-    poller.onPoll(async () => {
+    // the actual function that is invoked when a polling cycle starts
+    const pollingFn = async (retriesLeft = 5, interval = 1000) => {
       try {
-        // fetch data
         const result = await this.getCurrentTimeEntry()
 
         // send result to callback
         cb(null, result)
 
-        // TODO: make sure invoker of the func can stop polling and restart it
-        poller.poll()
+        // trigger next polling cycle
+        this.poller.poll()
       } catch (error) {
-        cb(error, null)
+        logger('error', error)
+
+        if (retriesLeft) {
+          logger('log', `retry polling. ${retriesLeft} tries left...`)
+
+          // wait and retry
+          setTimeout(() => {
+            pollingFn(retriesLeft - 1, interval * 2)
+          }, interval)
+
+          return
+        }
+
+        // something went wrong ...
+        cb('Max retries reached', null)
       }
-    })
+    }
+
+    // Wait till the timeout sent our event to the EventEmitter
+    this.poller.onPoll(pollingFn)
 
     // initial start
-    poller.poll(true)
+    pollingFn()
   }
 }
 

@@ -24,6 +24,7 @@
   "categories": ["Other"],
   "activationEvents": [
     "*",
+    "onCommand:toggl.fetchToggl",
     "onCommand:toggl.startEntry",
     "onCommand:toggl.startExistingEntry",
     "onCommand:toggl.stopEntry"
@@ -86,7 +87,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natterstefan/vscode-toggl-extension.git"
+    "url": "https://github.com/natterstefan/vscode-toggl-extension"
   },
   "bugs": {
     "url": "https://github.com/natterstefan/vscode-toggl-extension/issues"
@@ -97,6 +98,7 @@
     "@babel/core": "7.3.4",
     "@babel/plugin-proposal-class-properties": "7.3.4",
     "@babel/preset-env": "7.3.4",
+    "@types/jest": "24.0.11",
     "babel-jest": "24.5.0",
     "cross-env": "5.2.0",
     "eslint": "5.15.1",
