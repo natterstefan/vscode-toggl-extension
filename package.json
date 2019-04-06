@@ -5,9 +5,11 @@
   "author": "Stefan Natter",
   "publisher": "natterstefan",
   "license": "Apache-2.0",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "./dist/index.js",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "rimraf dist && rimraf dist-test",
     "build": "npm run clean && babel ./src --out-dir dist && babel test --out-dir dist-test",
@@ -21,7 +23,9 @@
   "engines": {
     "vscode": "^1.27.1"
   },
-  "categories": ["Other"],
+  "categories": [
+    "Other"
+  ],
   "activationEvents": [
     "*",
     "onCommand:toggl.fetchToggl",
@@ -88,7 +92,11 @@
     }
   },
   "lint-staged": {
-    "*.js": ["prettier --write", "npm run lint-fix", "git update-index --again"]
+    "*.js": [
+      "prettier --write",
+      "npm run lint-fix",
+      "git update-index --again"
+    ]
   },
   "repository": {
     "type": "git",
