@@ -72,7 +72,12 @@
         "toggl.pollingTimeout": {
           "type": "integer",
           "default": 3,
-          "description": "Number of seconds between polling current time entry data from Toggl. To not run into the API rate limit it cannot be below 3 seconds."
+          "description": "Number of seconds between polling current time entry data from Toggl. To not run into the API rate limit it cannot be below 3 seconds (default: 3)."
+        },
+        "toggl.maxChars": {
+          "type": "integer",
+          "default": 50,
+          "description": "Max. number of chars of the entry title shown in the status bar (default: 50)."
         }
       }
     }
@@ -94,27 +99,37 @@
   },
   "homepage": "https://github.com/natterstefan/vscode-toggl-extension#readme",
   "devDependencies": {
-    "@babel/cli": "7.2.3",
-    "@babel/core": "7.3.4",
-    "@babel/plugin-proposal-class-properties": "7.3.4",
-    "@babel/preset-env": "7.3.4",
+    "@babel/cli": "7.4.3",
+    "@babel/core": "7.4.3",
+    "@babel/plugin-proposal-class-properties": "7.4.0",
+    "@babel/preset-env": "7.4.3",
     "@types/jest": "24.0.11",
-    "babel-jest": "24.5.0",
+    "babel-eslint": "10.0.1",
+    "babel-jest": "24.7.1",
     "cross-env": "5.2.0",
-    "eslint": "5.15.1",
-    "eslint-config-ns": "0.3.0",
+    "eslint": "5.16.0",
+    "eslint-config-airbnb": "17.1.0",
+    "eslint-config-ns": "0.4.0",
+    "eslint-config-prettier": "4.1.0",
+    "eslint-plugin-import": "2.16.0",
+    "eslint-plugin-jest": "22.4.1",
+    "eslint-plugin-jsx-a11y": "6.2.1",
+    "eslint-plugin-prettier": "3.0.1",
+    "eslint-plugin-react": "7.12.4",
+    "eslint-plugin-react-hooks": "1.6.0",
     "husky": "1.3.1",
-    "jest": "24.5.0",
-    "jest-environment-node": "24.5.0",
+    "jest": "24.7.1",
+    "jest-environment-node": "24.7.1",
     "lint-staged": "8.1.5",
     "nock": "10.0.6",
     "prettier": "1.16.4",
     "rimraf": "2.6.3",
     "source-map-support": "0.5.11",
-    "vscode": "1.1.30"
+    "vscode": "1.1.33"
   },
   "dependencies": {
     "custom-error-generator": "7.0.0",
+    "ellipsize": "0.1.0",
     "moment": "2.24.0",
     "toggl-api": "1.0.1"
   }

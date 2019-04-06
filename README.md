@@ -32,6 +32,7 @@ Currently the extension does provide the following settings:
 - `toggl.pollingTimeout` (Default: 3): timeout between polling intervals, when the extension
   fetchs the latest current task from toggl. In order to not hit [toggl's rate limit](https://github.com/toggl/toggl_api_docs#the-api-format)
   you cannot set it below 3 seconds.
+- `toggl.maxChars`: Max. number of chars of the entry title shown in the status bar (default: 50).
 
 ## Development & Contribution
 

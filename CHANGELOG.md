@@ -19,6 +19,8 @@ adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 - move from custom method to change statusbar to "internal" (not exposed in
   package.json) vs code command
 - improve polling with better retry-handling
+- new setting `toggl.maxChars`: Max. number of chars of the entry title shown in
+  the status bar (default: 50).
 
 ## 2019/03/06 0.1.0
 
