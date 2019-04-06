@@ -46,6 +46,7 @@ jest.mock(
               apiKey: '87654321',
               defaultProjectId: '12345678',
               pollingTimeout: 60,
+              maxChars: 40, // default 50
             }
           }
 

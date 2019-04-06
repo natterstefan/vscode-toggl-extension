@@ -177,9 +177,9 @@ export class TogglApiClient {
 
   // POLLING
   /**
-   * pollCurrentTimeEntry: will poll every x-seconds (min. 3) and get the
-   * currently tracked entry from toggl.com. It will also retry 5 times (with an
-   * exponential retry timeout of 2 * interval).
+   * pollCurrentTimeEntry: will poll every x-seconds (min. 1s) and get the
+   * currently tracked entry from toggl.com. It will also retry 10 times (with
+   * an exponential retry timeout of 2 * interval).
    *
    * @param {function} cb
    *
@@ -190,7 +190,8 @@ export class TogglApiClient {
    */
   pollCurrentTimeEntry(cb) {
     // the actual function that is invoked when a polling cycle starts
-    const pollingFn = async (retriesLeft = 5, interval = 1000) => {
+    const maxInterval = 1000 * 30 // 30s
+    const pollingFn = async (retriesLeft = 10, interval = 1000) => {
       try {
         const result = await this.getCurrentTimeEntry()
 
@@ -203,18 +204,24 @@ export class TogglApiClient {
         logger('error', error)
 
         if (retriesLeft) {
-          logger('log', `retry polling. ${retriesLeft} tries left...`)
+          logger('log', `retry polling (${retriesLeft} tries left)...`)
 
           // wait and retry
-          setTimeout(() => {
-            pollingFn(retriesLeft - 1, interval * 2)
-          }, interval)
+          setTimeout(
+            () => {
+              pollingFn(retriesLeft - 1, interval * 2)
+            },
+            // increase interval with every timeout, until we reached maxInterval
+            interval <= maxInterval ? interval : maxInterval,
+          )
 
           return
         }
 
         // something went wrong ...
-        cb('Max retries reached', null)
+        const msg =
+          'Could not properly fetch data from Toggl. You are either offline or something else happened. Please, check your internet connection, reload your window and try it again.'
+        cb(msg, null)
       }
     }
 

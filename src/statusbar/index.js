@@ -6,6 +6,9 @@
  * - list of icons https://gist.github.com/reyawn/b23ded4ddbfe8aacf77f0581f81000a0
  */
 import { commands, StatusBarAlignment, window } from 'vscode' // eslint-disable-line
+import ellipsize from 'ellipsize'
+
+import { getExtensionSetting } from '../utils'
 import { CONSTANTS, EVENTS } from '../constants'
 
 class StatusBar {
@@ -48,7 +51,9 @@ class StatusBar {
       return
     }
 
-    this.updateStatus(`${togglItem.description} (${togglItem.durationText})`)
+    const maxChars = getExtensionSetting('maxChars') || 50
+    const shortText = ellipsize(togglItem.description, maxChars)
+    this.updateStatus(`${shortText} (${togglItem.durationText})`)
   }
 }
 
