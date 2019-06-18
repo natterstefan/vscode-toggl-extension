@@ -2,20 +2,20 @@ language: node_js
 
 sudo: false
 
+# NOTE: https://docs.travis-ci.com/user/multi-os/, could maybe used here.
+# https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
+dist: xenial
+services:
+  - xvfb
+
 os:
   - osx
   - linux
+  - windows
 
 node_js:
-  - "8"
-  - "10"
-
-before_install:
-  - if [ $TRAVIS_OS_NAME == "linux" ]; then
-    export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
-    sh -e /etc/init.d/xvfb start;
-    sleep 3;
-    fi
+  - '8'
+  - '10'
 
 install:
   - npm install
@@ -23,3 +23,5 @@ install:
 
 script:
   - npm test
+
+cache: npm
