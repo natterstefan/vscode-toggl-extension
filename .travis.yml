@@ -2,25 +2,20 @@ language: node_js
 
 sudo: false
 
-# https://docs.travis-ci.com/user/multi-os/
-matrix:
-  include:
-    - os: linux
-      dist: xenial
-      # https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
-      services:
-        - xvfb
-      node_js:
-        - '8'
-        - '10'
-    - os: osx
-      node_js:
-        - '8'
-        - '10'
-    - os: windows
-      node_js:
-        - '8'
-        - '10'
+# NOTE: https://docs.travis-ci.com/user/multi-os/, could maybe used here.
+# https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
+dist: xenial
+services:
+  - xvfb
+
+os:
+  - osx
+  - linux
+  - windows
+
+node_js:
+  - '8'
+  - '10'
 
 install:
   - npm install
