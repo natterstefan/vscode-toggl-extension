@@ -25,15 +25,17 @@ Studio Code :watch:
 
 Currently the extension does provide the following settings:
 
-- `toggl.apiKey`: your [private API key](https://www.toggl.com/app/profile)
+- `toggl.apiKey`: your [private Toggl API key](https://www.toggl.com/app/profile)
 - `toggl.defaultProjectId`: all created tasks will use this as assigned project.
   You can [get the id from the projects overview](https://www.toggl.com/app/projects).
   Simply select the project and obtain the id from the url. Example: the id of
   `https://www.toggl.com/app/projects/xxxxx/edit/12345678` would be `12345678`
-- `toggl.pollingTimeout` (Default: 3): timeout between polling intervals, when the extension
+- `toggl.pollingTimeout`: timeout between polling intervals, when the extension
   fetchs the latest current task from toggl. In order to not hit [toggl's rate limit](https://github.com/toggl/toggl_api_docs#the-api-format)
-  you cannot set it below 3 seconds.
+  you cannot set it below 3 seconds (default: 3).
 - `toggl.maxChars`: Max. number of chars of the entry title shown in the status bar (default: 50).
+- `toggl.statusBarCommand`: Choose command to be executed when Toggl status bar
+  item is clicked (default: toggl.openToggl).
 
 ## Development & Contribution
 
