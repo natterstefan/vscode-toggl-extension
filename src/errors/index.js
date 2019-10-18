@@ -27,9 +27,7 @@ export const SettingsError = createCustomError(
         break
     }
 
-    this.text = `${
-      CONSTANTS.name
-    } - SettingsError: Please configure ${settingName}, before using the extension. Once you have changed it, reload the workspace and window.`
+    this.text = `${CONSTANTS.name} - SettingsError: Please configure ${settingName}, before using the extension. Once you have changed it, reload the workspace and window.`
   },
 )
 
