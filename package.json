@@ -38,27 +38,27 @@
       {
         "category": "Toggl",
         "command": "toggl.startEntry",
-        "title": "Start with new Entry"
+        "title": "Start with new entry."
       },
       {
         "category": "Toggl",
         "command": "toggl.startExistingEntry",
-        "title": "Start with existing Entry"
+        "title": "Start with existing entry."
       },
       {
         "category": "Toggl",
         "command": "toggl.stopEntry",
-        "title": "Stop current Entry"
+        "title": "Stop current entry."
       },
       {
         "category": "Toggl",
         "command": "toggl.openToggl",
-        "title": "Open Toggl Timer (Browser)"
+        "title": "Open Toggl timer with your default browser."
       },
       {
         "category": "Toggl",
         "command": "toggl.fetchToggl",
-        "title": "Fetch current Entry from Toggl"
+        "title": "Fetch current entry from Toggl."
       }
     ],
     "configuration": {
@@ -82,6 +82,25 @@
           "type": "integer",
           "default": 50,
           "description": "Max. number of chars of the entry title shown in the status bar (default: 50)."
+        },
+        "toggl.statusBarCommand": {
+          "type": "string",
+          "default": "toggl.openToggl",
+          "description": "Choose command to be executed when Toggl status bar item is clicked (default: toggl.openToggl).",
+          "enum": [
+            "toggl.startEntry",
+            "toggl.startExistingEntry",
+            "toggl.stopEntry",
+            "toggl.openToggl",
+            "toggl.fetchToggl"
+          ],
+          "enumDescriptions": [
+            "Start with new entry.",
+            "Start with existing entry.",
+            "Stop current entry.",
+            "Open Toggl timer with your default browser.",
+            "Fetch current entry from Toggl."
+          ]
         }
       }
     }
