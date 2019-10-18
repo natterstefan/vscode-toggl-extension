@@ -9,11 +9,17 @@ docs/**
 src/**/*.test.js
 dist-test/**
 test/**
+test-project/**
 
 # tools
+.github/**
 .eslintrc.js
 .gitignore
 .npmrc
 .nvmrc
 .prettierrc
 babel.config.js
+
+# development
+node_modules
+tmp

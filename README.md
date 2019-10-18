@@ -86,7 +86,13 @@ other VS Code instance is running.
 
 ### Publishing
 
-- [Publishing](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions)
+Simple execute the commands below or read more about [Publishing](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#packaging-extensions)
+first.
+
+```bash
+npx vsce package
+npx vsce publish
+```
 
 ## Tools
 
