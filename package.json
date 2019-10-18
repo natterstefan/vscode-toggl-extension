@@ -88,7 +88,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook"
     }
   },
   "lint-staged": {
@@ -97,6 +98,11 @@
       "npm run lint-fix",
       "git update-index --again"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "repository": {
     "type": "git",
@@ -114,7 +120,9 @@
     "@types/jest": "24.0.19",
     "babel-eslint": "10.0.3",
     "babel-jest": "24.9.0",
+    "commitizen": "4.0.3",
     "cross-env": "6.0.3",
+    "cz-conventional-changelog": "3.0.2",
     "eslint": "5.16.0",
     "eslint-config-airbnb": "17.1.0",
     "eslint-config-ns": "0.4.0",
