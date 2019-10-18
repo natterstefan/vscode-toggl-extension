@@ -11,11 +11,11 @@ services:
 os:
   - osx
   - linux
-  - windows
+  # - windows # does not work currently, temporary disabled
 
 node_js:
-  - '8'
   - '10'
+  - '12'
 
 install:
   - npm install
