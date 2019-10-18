@@ -7,7 +7,10 @@ const createElementName = name => `${CONSTANTS.prefix}.${name}`
 
 // internal (for the extension) and public event names
 export const EVENTS = {
-  updateStatusBar: createElementName('udpateStatusbar'),
+  // internal events
+  updateStatusBar: createElementName('updateStatusBar'),
+  clickStatusBar: createElementName('clickStatusBar'),
+  // public events
   startEntry: createElementName('startEntry'),
   startExistingEntry: createElementName('startExistingEntry'),
   stopEntry: createElementName('stopEntry'),

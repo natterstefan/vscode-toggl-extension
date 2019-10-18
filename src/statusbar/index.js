@@ -8,7 +8,7 @@
 import { commands, StatusBarAlignment, window } from 'vscode' // eslint-disable-line
 import ellipsize from 'ellipsize'
 
-import { getExtensionSetting } from '../utils'
+import { getExtensionSetting, logger } from '../utils'
 import { CONSTANTS, EVENTS } from '../constants'
 
 class StatusBar {
@@ -21,22 +21,43 @@ class StatusBar {
   }
 
   init() {
-    // register internal command
-    const commandId = EVENTS.updateStatusBar
-    const commandHandler = this.showTogglItemInfo
+    // register internal commands
+    const statusBarCommands = [
+      {
+        commandId: EVENTS.updateStatusBar,
+        commandHandler: this.showTogglItemInfo,
+      },
+      {
+        commandId: EVENTS.clickStatusBar,
+        commandHandler: this.onClick,
+      },
+    ]
 
-    // activate the command
-    const command = commands.registerCommand(commandId, commandHandler)
-    this.context.subscriptions.push(command)
+    // activate the commands
+    statusBarCommands.forEach(({ commandId, commandHandler }) => {
+      const command = commands.registerCommand(commandId, commandHandler)
+      this.context.subscriptions.push(command)
+    })
 
     // create the StatusBar with command onClick
     this.status = window.createStatusBarItem(StatusBarAlignment.Right, 100)
-    this.status.command = EVENTS.openToggl
+    this.status.command = EVENTS.clickStatusBar
     this.status.tooltip = `${CONSTANTS.name}: Click to open toggl.com!`
+
     this.context.subscriptions.push(this.status)
 
     // initialise empty bar
     this.updateStatus()
+  }
+
+  onClick() {
+    // it is possible to customize the command executed when clicking the statusbar
+    const command = getExtensionSetting('statusBarCommand') || EVENTS.openToggl
+    try {
+      commands.executeCommand(command)
+    } catch (error) {
+      logger('error', error)
+    }
   }
 
   updateStatus(text) {

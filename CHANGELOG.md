@@ -6,6 +6,10 @@ adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## Unreleased
 
+### Added
+
+- Status Bar: onClick command can be customized (`toggl.statusBarCommand`)
+
 ### Updated
 
 - chore: updated (dev)Dependencies, incl. node (10.x -> 12.12.x)
