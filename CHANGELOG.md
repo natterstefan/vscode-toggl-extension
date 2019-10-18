@@ -4,6 +4,12 @@ All notable changes to this project will be documented here. The format is based
 on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project
 adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Updated
+
+- chore: updated (dev)Dependencies, incl. node (10.x -> 12.12.x)
+
 ## 2019/04/06 0.2.0
 
 ### Added
