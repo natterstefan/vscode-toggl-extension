@@ -88,7 +88,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "prepare-commit-msg": "exec < /dev/tty && git cz --hook"
     }
   },
   "lint-staged": {
@@ -97,6 +98,11 @@
       "npm run lint-fix",
       "git update-index --again"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   },
   "repository": {
     "type": "git",
@@ -107,33 +113,38 @@
   },
   "homepage": "https://github.com/natterstefan/vscode-toggl-extension#readme",
   "devDependencies": {
-    "@babel/cli": "7.4.4",
-    "@babel/core": "7.4.5",
-    "@babel/plugin-proposal-class-properties": "7.4.4",
-    "@babel/preset-env": "7.4.5",
-    "@types/jest": "24.0.15",
-    "babel-eslint": "10.0.2",
-    "babel-jest": "24.8.0",
-    "cross-env": "5.2.0",
-    "eslint": "5.16.0",
-    "eslint-config-airbnb": "17.1.0",
-    "eslint-config-ns": "0.4.0",
-    "eslint-config-prettier": "5.0.0",
-    "eslint-plugin-import": "2.17.3",
-    "eslint-plugin-jest": "22.6.4",
-    "eslint-plugin-jsx-a11y": "6.2.1",
-    "eslint-plugin-prettier": "3.1.0",
-    "eslint-plugin-react": "7.13.0",
-    "eslint-plugin-react-hooks": "1.6.0",
-    "husky": "2.4.1",
-    "jest": "24.8.0",
-    "jest-environment-node": "24.8.0",
-    "lint-staged": "8.2.1",
-    "nock": "10.0.6",
+    "@babel/cli": "7.6.4",
+    "@babel/core": "7.6.4",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/preset-env": "7.6.3",
+    "@types/jest": "24.0.19",
+    "babel-eslint": "10.0.3",
+    "babel-jest": "24.9.0",
+    "commitizen": "4.0.3",
+    "cross-env": "6.0.3",
+    "cz-conventional-changelog": "3.0.2",
+    "eslint": "6.5.1",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-config-ns": "1.0.0",
+    "eslint-config-prettier": "6.4.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jest": "22.19.0",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-prettier": "3.1.1",
+    "eslint-plugin-react": "7.16.0",
+    "eslint-plugin-react-hooks": "2.1.2",
+    "husky": "3.0.9",
+    "jest": "24.9.0",
+    "jest-environment-node": "24.9.0",
+    "lint-staged": "9.4.2",
+    "nock": "11.4.0",
     "prettier": "1.18.2",
-    "rimraf": "2.6.3",
-    "source-map-support": "0.5.12",
-    "vscode": "1.1.34"
+    "rimraf": "3.0.0",
+    "source-map-support": "0.5.13",
+    "vscode": "1.1.36"
+  },
+  "devDependencies/comments": {
+    "eslint-plugin-react": "Is only installed, because of eslint-config-ns. I might need to take care of this in the future."
   },
   "dependencies": {
     "custom-error-generator": "7.0.0",

@@ -1,27 +1,33 @@
-language: node_js
-
 sudo: false
 
-# NOTE: https://docs.travis-ci.com/user/multi-os/, could maybe used here.
-# https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
-dist: xenial
-services:
-  - xvfb
-
-os:
-  - osx
-  - linux
-  - windows
-
+language: node_js
 node_js:
-  - '8'
-  - '10'
+  - 'node'
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+    - os: osx
+
+# inspired by https://github.com/redhat-developer/vscode-openshift-tools/blob/9af034b8f9c2d2c156f5ce1cfae46cc499ac8504/.travis.yml
+# https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
+before_install:
+  - if [ $TRAVIS_OS_NAME == "linux" ]; then
+    export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
+    sh -e /etc/init.d/xvfb start;
+    sleep 3;
+    fi
 
 install:
   - npm install
   - npm run vscode:prepublish
 
 script:
-  - npm test
+  - npm test --silent
 
-cache: npm
+cache:
+  directories:
+    - ~/.npm # cache npm's cache
+    - ~/npm # cache latest npm
+    - node_modules # npm install, unlike npm ci, doesn't wipe node_modules

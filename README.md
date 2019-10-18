@@ -1,8 +1,9 @@
 # Toggl Extension for VSCode
 
-[![Build Status](https://travis-ci.com/natterstefan/vscode-toggl-extension.svg?branch=master)](https://travis-ci.com/natterstefan/vscode-toggl-extension) [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/natterstefan.vs-code-toggl-extension.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension) [![Installs](https://vsmarketplacebadge.apphb.com/installs/natterstefan.vs-code-toggl-extension.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension) [![downloads](https://vsmarketplacebadge.apphb.com/downloads/natterstefan.vs-code-toggl-extension.svg "Current Release")](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension)
+[![Build Status](https://travis-ci.com/natterstefan/vscode-toggl-extension.svg?branch=master)](https://travis-ci.com/natterstefan/vscode-toggl-extension) [![Marketplace Version](https://vsmarketplacebadge.apphb.com/version/natterstefan.vs-code-toggl-extension.svg 'Current Release')](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension) [![Installs](https://vsmarketplacebadge.apphb.com/installs/natterstefan.vs-code-toggl-extension.svg 'Current Release')](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension) [![downloads](https://vsmarketplacebadge.apphb.com/downloads/natterstefan.vs-code-toggl-extension.svg 'Current Release')](https://marketplace.visualstudio.com/items?itemName=natterstefan.vs-code-toggl-extension)
 
-Track your working hours in Toggl directly in your VS Code. :watch:
+Track your working hours with [Toggl](https://toggl.com) directly in Visual
+Studio Code :watch:
 
 ## Features and Commands
 
@@ -39,7 +40,7 @@ Currently the extension does provide the following settings:
 ### Requirements
 
 ```sh
-node ^10.14.2
+node ^12.12.0
 vscode ^1.27.1
 ```
 
