@@ -21,5 +21,4 @@ test-project/**
 babel.config.js
 
 # development
-node_modules
 tmp
