@@ -13,6 +13,8 @@ const fromRoot = (...subPaths) => path.resolve(rootDir, ...subPaths)
 
 const jestConfig = {
   colors: true,
+  detectOpenHandles: true,
+  maxWorkers: 10,
   moduleFileExtensions: ['js'],
   rootDir,
   roots: ['<rootDir>/dist'],
