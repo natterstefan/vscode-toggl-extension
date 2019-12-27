@@ -100,18 +100,17 @@ class Commands {
         )
 
         if (typeof value !== 'undefined') {
-          logger('log', `Selected value: "${value}"`);
+          const humanTogglItem = await this.doStart(value)
+
+          // tell the user everything worked
+          window.showInformationMessage(`Started tracking "${value}"`)
+
+          // and update the statusbar
+          commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
         } else {
-          logger('error', 'No value selected');
+          logger('log', 'No value selected');
         }
 
-        const humanTogglItem = await this.doStart(value)
-
-        // tell the user everything worked
-        window.showInformationMessage(`Started tracking "${value}"`)
-
-        // and update the statusbar
-        commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
       } catch (error) {
         // TODO: handle error properly
         logger('error', error)
