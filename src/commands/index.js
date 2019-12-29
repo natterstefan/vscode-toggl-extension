@@ -61,7 +61,7 @@ class Commands {
         let entryText = ''
         const editor = window.activeTextEditor
         if (editor) {
-          const selection = editor.selection
+          const { selection } = editor
           if (selection) {
             entryText = editor.document.getText(selection)
           }
@@ -96,7 +96,7 @@ class Commands {
         const entries = await this.togglClient.getAllEntries()
         const value = await window.showQuickPick(
           entries.map(i => i.description),
-          {placeHolder: 'Select value from the list'},
+          { placeHolder: 'Select value from the list' },
         )
 
         if (typeof value !== 'undefined') {
@@ -108,9 +108,8 @@ class Commands {
           // and update the statusbar
           commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
         } else {
-          logger('log', 'No value selected');
+          logger('log', 'No value selected')
         }
-
       } catch (error) {
         // TODO: handle error properly
         logger('error', error)
