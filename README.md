@@ -17,8 +17,13 @@ Studio Code :watch:
 
 ## Features
 
+- add new entries or choose from existing entries from your toggl account
+- text for new entry can be selected in editor (just select the text and execute
+  the "Toggl: Start with new entry." command)
 - status bar shows current task and opens toggl.com when clicked
-- Polling: fetches data periodically from toggl to show the current task in the
+- clicks on the status bar can execute custom command (see
+  `toggl.statusBarCommand` setting below)
+- polling: fetches data periodically from toggl to show the current task in the
   status bar
 
 ## Extension Settings
