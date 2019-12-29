@@ -58,8 +58,18 @@ class Commands {
     const commandId = EVENTS.startEntry
     const commandHandler = async () => {
       try {
+        let entryText = ''
+        const editor = window.activeTextEditor
+        if (editor) {
+          const { selection } = editor
+          if (selection) {
+            entryText = editor.document.getText(selection)
+          }
+        }
+
         const value = await window.showInputBox({
           prompt: 'Enter the name of the entry',
+          value: entryText,
         })
         const humanTogglItem = await this.doStart(value)
 
@@ -86,16 +96,20 @@ class Commands {
         const entries = await this.togglClient.getAllEntries()
         const value = await window.showQuickPick(
           entries.map(i => i.description),
-          {},
+          { placeHolder: 'Select value from the list' },
         )
 
-        const humanTogglItem = await this.doStart(value)
+        if (typeof value !== 'undefined') {
+          const humanTogglItem = await this.doStart(value)
 
-        // tell the user everything worked
-        window.showInformationMessage(`Started tracking "${value}"`)
+          // tell the user everything worked
+          window.showInformationMessage(`Started tracking "${value}"`)
 
-        // and update the statusbar
-        commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
+          // and update the statusbar
+          commands.executeCommand(this.statusBarUpdateEvent, humanTogglItem)
+        } else {
+          logger('log', 'No value selected')
+        }
       } catch (error) {
         // TODO: handle error properly
         logger('error', error)

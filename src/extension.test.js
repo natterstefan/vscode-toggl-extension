@@ -30,6 +30,7 @@
  * - https://github.com/Microsoft/vscode/issues/55340
  * - https://github.com/Microsoft/vscode/issues/53295
  */
+import { window } from 'vscode' // eslint-disable-line
 import { activate } from './extension'
 
 describe('Extension', () => {
@@ -55,6 +56,26 @@ describe('Extension', () => {
     expect(global.mockInfoListener).toHaveBeenLastCalledWith(
       'Started tracking "test entry"',
     )
+  })
+
+  it('startEntry can be executed with selected text', async () => {
+    window.activeTextEditor = {
+      selection: true,
+      document: {
+        getText: jest.fn().mockReturnValue('active editor selection'),
+      },
+    }
+
+    await global.vscode.commands.executeCommand('toggl.startEntry')
+
+    expect(global.mockInfoListener).toHaveBeenCalledTimes(1)
+    expect(global.mockInfoListener).toHaveBeenLastCalledWith(
+      'Started tracking "active editor selection"',
+    )
+    expect(window.activeTextEditor.document.getText).toHaveBeenCalledTimes(1)
+
+    // reset for other tests
+    window.activeTextEditor = undefined
   })
 
   it('stopEntry can be executed', async () => {

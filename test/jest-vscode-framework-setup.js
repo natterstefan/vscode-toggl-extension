@@ -56,7 +56,7 @@ jest.mock(
       window: {
         ...global.vscode.window,
         // returning a static value works as long as only startEntry uses showInputbox
-        showInputBox: jest.fn().mockResolvedValue('test entry'),
+        showInputBox: jest.fn(({ value }) => value || 'test entry'),
         showQuickPick: jest.fn().mockResolvedValue('existing test entry'),
         showInformationMessage: jest.fn(m => {
           global.mockInfoListener(m)
