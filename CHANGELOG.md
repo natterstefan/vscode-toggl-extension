@@ -4,6 +4,13 @@ All notable changes to this project will be documented here. The format is based
 on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project
 adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Features
+
+- text for new entry can be selected in editor ([#15](https://github.com/natterstefan/vscode-toggl-extension/pull/15)),
+  thank you [pavelsuk](https://github.com/pavelsuk)
+
 ## 2019/10/19 0.3.1
 
 ### Fixed

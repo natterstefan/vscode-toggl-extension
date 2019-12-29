@@ -114,23 +114,23 @@ contribute! :muscle:
 This extension is not affiliated, associated, authorized, endorsed by or in any
 way officially connected to Toggl ([toggl.com](https://toggl.com)).
 
-## Maintainers
+## Contributors ✨
 
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
 <table>
-  <tbody>
-    <tr>
-      <td align="center">
-        <a href="https://github.com/natterstefan">
-          <img width="150" height="150" src="https://github.com/natterstefan.png?v=3&s=150">
-          </br>
-          Stefan Natter
-        </a>
-        <div>
-          <a href="https://twitter.com/natterstefan">
-            <img src="https://img.shields.io/twitter/follow/natterstefan.svg?style=social&label=Follow" />
-          </a>
-        </div>
-      </td>
-    </tr>
-  <tbody>
+  <tr>
+    <td align="center"><a href="http://twitter.com/natterstefan"><img src="https://avatars2.githubusercontent.com/u/1043668?v=4" width="100px;" alt=""/><br /><sub><b>Stefan Natter</b></sub></a><br /><a href="https://github.com/natterstefan/vscode-toggl-extension/commits?author=natterstefan" title="Code">💻</a> <a href="https://github.com/natterstefan/vscode-toggl-extension/commits?author=natterstefan" title="Documentation">📖</a> <a href="#ideas-natterstefan" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/natterstefan/vscode-toggl-extension/commits?author=natterstefan" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/pavelsuk"><img src="https://avatars3.githubusercontent.com/u/2633298?v=4" width="100px;" alt=""/><br /><sub><b>Pavel Suk</b></sub></a><br /><a href="https://github.com/natterstefan/vscode-toggl-extension/commits?author=pavelsuk" title="Code">💻</a> <a href="#ideas-pavelsuk" title="Ideas, Planning, & Feedback">🤔</a></td>
+  </tr>
 </table>
+
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
