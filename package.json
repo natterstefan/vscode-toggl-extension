@@ -23,7 +23,7 @@
     "vscode:prepublish": "npm run build"
   },
   "engines": {
-    "vscode": "^1.27.1"
+    "vscode": "^1.56.2"
   },
   "categories": [
     "Other"
@@ -162,16 +162,16 @@
     "prettier": "1.19.1",
     "rimraf": "3.0.0",
     "source-map-support": "0.5.16",
-    "vscode": "1.1.36"
+    "vscode": "1.1.37"
   },
   "devDependencies/comments": {
     "eslint-plugin-react": "Is only installed, because of eslint-config-ns. I might need to take care of this in the future."
   },
   "dependencies": {
+    "@natterstefan/toggl-api": "1.0.1",
     "all-contributors-cli": "6.11.2",
     "custom-error-generator": "7.0.0",
     "ellipsize": "0.1.0",
-    "moment": "2.24.0",
-    "toggl-api": "1.0.1"
+    "moment": "2.24.0"
   }
 }
