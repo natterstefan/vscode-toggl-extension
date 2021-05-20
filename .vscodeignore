@@ -22,3 +22,6 @@ babel.config.js
 
 # development
 tmp
+
+# misc
+.github

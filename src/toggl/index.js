@@ -1,5 +1,5 @@
 import { workspace } from 'vscode' // eslint-disable-line
-import TogglClient from 'toggl-api'
+import TogglClient from '@natterstefan/toggl-api'
 import moment from 'moment'
 
 import { SettingsError } from '../errors'

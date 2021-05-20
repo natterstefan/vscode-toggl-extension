@@ -1,23 +1,12 @@
-sudo: false
-
 language: node_js
 node_js:
-  - 'node'
+  - 12
+  - 14
+  - 16
 
 matrix:
   include:
-    - os: linux
-      dist: trusty
     - os: osx
-
-# inspired by https://github.com/redhat-developer/vscode-openshift-tools/blob/9af034b8f9c2d2c156f5ce1cfae46cc499ac8504/.travis.yml
-# https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-to-run-tests-that-require-a-gui
-before_install:
-  - if [ $TRAVIS_OS_NAME == "linux" ]; then
-    export CXX="g++-4.9" CC="gcc-4.9" DISPLAY=:99.0;
-    sh -e /etc/init.d/xvfb start;
-    sleep 3;
-    fi
 
 install:
   - npm install

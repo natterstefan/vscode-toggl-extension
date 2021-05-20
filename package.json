@@ -23,7 +23,7 @@
     "vscode:prepublish": "npm run build"
   },
   "engines": {
-    "vscode": "^1.27.1"
+    "vscode": "^1.56.2"
   },
   "categories": [
     "Other"
@@ -134,14 +134,14 @@
   },
   "homepage": "https://github.com/natterstefan/vscode-toggl-extension#readme",
   "devDependencies": {
-    "@babel/cli": "7.7.7",
-    "@babel/core": "7.7.7",
-    "@babel/plugin-proposal-class-properties": "7.7.4",
-    "@babel/preset-env": "7.7.7",
+    "@babel/cli": "7.14.3",
+    "@babel/core": "7.14.3",
+    "@babel/plugin-proposal-class-properties": "7.13.0",
+    "@babel/preset-env": "7.14.2",
     "@types/jest": "24.0.24",
-    "babel-eslint": "10.0.3",
+    "babel-eslint": "10.1.0",
     "babel-jest": "24.9.0",
-    "commitizen": "4.0.3",
+    "commitizen": "4.2.4",
     "cross-env": "6.0.3",
     "cz-conventional-changelog": "3.0.2",
     "eslint": "6.7.2",
@@ -160,18 +160,18 @@
     "lint-staged": "9.5.0",
     "nock": "11.7.0",
     "prettier": "1.19.1",
-    "rimraf": "3.0.0",
+    "rimraf": "3.0.2",
     "source-map-support": "0.5.16",
-    "vscode": "1.1.36"
+    "vscode": "1.1.37"
   },
   "devDependencies/comments": {
     "eslint-plugin-react": "Is only installed, because of eslint-config-ns. I might need to take care of this in the future."
   },
   "dependencies": {
-    "all-contributors-cli": "6.11.2",
+    "@natterstefan/toggl-api": "1.0.1",
+    "all-contributors-cli": "6.20.0",
     "custom-error-generator": "7.0.0",
     "ellipsize": "0.1.0",
-    "moment": "2.24.0",
-    "toggl-api": "1.0.1"
+    "moment": "2.29.1"
   }
 }
