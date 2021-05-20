@@ -13,7 +13,7 @@ install:
   - npm run vscode:prepublish
 
 script:
-  - npm test
+  - npm test --silent
 
 cache:
   directories:
